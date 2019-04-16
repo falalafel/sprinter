@@ -3,6 +3,8 @@ organization := "falalafel"
 version := "0.1"
 scalaVersion := "2.12.8"
 
+scalacOptions += "-Ypartial-unification"
+
 libraryDependencies ++= {
 
   val slickVersion     = "3.3.0"
@@ -14,6 +16,8 @@ libraryDependencies ++= {
   val akkaCirceVersion = "1.25.2"
   val postgresVersion  = "42.2.5"
   val slf4jVersion     = "1.7.25"
+  val catsVersion      = "1.5.0"
+  val catsSlickVersion = "0.9.1"
 
   Seq(
     "com.typesafe.slick"       %% "slick"           % slickVersion,
@@ -26,12 +30,21 @@ libraryDependencies ++= {
     "io.circe"                 %% "circe-core"      % circeVersion,
     "io.circe"                 %% "circe-generic"   % circeVersion,
     "io.circe"                 %% "circe-parser"    % circeVersion,
+    "io.circe"                 %% "circe-generic-extras" % circeVersion,
     "de.heikoseeberger"        %% "akka-http-circe" % akkaCirceVersion,
     "org.postgresql"           % "postgresql"       % postgresVersion,
-    "org.slf4j"                % "slf4j-nop"        % slf4jVersion
+    "org.slf4j"                % "slf4j-nop"        % slf4jVersion,
+    "org.typelevel"            %% "cats-core"       % catsVersion,
+    "com.rms.miu"              %% "slick-cats"      % catsSlickVersion,
+    "com.typesafe.akka"        %% "akka-stream-testkit" % akkaVersion,
+    "com.typesafe.akka"        %% "akka-http-testkit"   % akkaHttpVersion
   )
 
 }
 
-configs(IntegrationTest)
-Seq(Defaults.itSettings: _*)
+lazy val root = (project in file("."))
+  .configs(IntegrationTest)
+  .settings(
+    Defaults.itSettings:  _*
+    // other settings here
+  )

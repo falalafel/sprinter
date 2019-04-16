@@ -2,8 +2,8 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.{ActorMaterializer, Materializer}
 import com.typesafe.config.ConfigFactory
-import project.repositories.ProjectRepository
-import project.routers.ProjectRouter
+import project.storages.ProjectStorage
+import project.routes.ProjectRoute
 import project.services.ProjectService
 import slick.jdbc.PostgresProfile.api._
 import scala.concurrent.ExecutionContext
@@ -19,11 +19,11 @@ object Main extends App {
   lazy val configDbPath = "postgres"
   lazy val database = Database.forConfig(configDbPath, config)
 
-  lazy val projectRepository: ProjectRepository = wire[ProjectRepository]
+  lazy val projectRepository: ProjectStorage = wire[ProjectStorage]
   lazy val projectService: ProjectService       = wire[ProjectService]
-  lazy val projectRouter: ProjectRouter         = wire[ProjectRouter]
+  lazy val projectRouter: ProjectRoute         = wire[ProjectRoute]
 
-  val routes = projectRouter.projectRouters
+  val routes = projectRouter.projectRoutes
   val interface = "localhost"
   val port = 8080
   Http().bindAndHandle(routes, interface, port)
