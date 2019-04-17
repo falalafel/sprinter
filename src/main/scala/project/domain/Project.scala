@@ -1,7 +1,6 @@
 package project.domain
 
 import java.time.LocalDate
-
 import scala.util.Random
 
 object ProjectId {

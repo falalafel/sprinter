@@ -5,9 +5,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.stream.Materializer
 import project.services.ProjectService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
-import io.circe.generic.auto._
-import project.domain.{Project, ProjectCreate, ProjectId, ProjectUpdate}
-
+import project.domain.{ProjectCreate, ProjectId, ProjectUpdate}
 import scala.concurrent.ExecutionContext
 
 class ProjectRoute(projectService: ProjectService)
