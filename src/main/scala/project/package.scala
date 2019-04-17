@@ -1,3 +1,5 @@
+import java.time.LocalDate
+
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.extras.semiauto._
 import io.circe.generic.extras.defaults._

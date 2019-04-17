@@ -4,7 +4,7 @@ import java.time.LocalDate
 import scala.util.Random
 
 object ProjectId {
-  def generate: ProjectId = ProjectId(Random.nextInt())
+  def generate: ProjectId = ProjectId(Random.nextInt().abs)
 }
 
 case class ProjectId(id: Int) extends AnyVal

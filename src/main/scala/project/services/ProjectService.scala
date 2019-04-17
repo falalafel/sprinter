@@ -16,8 +16,8 @@ class ProjectService(db: Database, projectStorage: ProjectStorage)
   def getProject(projectId: ProjectId): Future[Option[Project]] =
     db.run(projectStorage.getProjectById(projectId))
 
-  def createProject(project: Project): Future[Int] =
-    db.run(projectStorage.insertProject(project))
+  def createProject(project: Project): Future[ProjectId] =
+    db.run(projectStorage.insertProject(project).map(_ => project.projectId))
 
   def updateProject(projectId: ProjectId, projectUpdate: ProjectUpdate): Future[Option[Int]] = {
     val query = for {
