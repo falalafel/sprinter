@@ -26,7 +26,7 @@ class ProjectRoute(projectService: ProjectService)
     pathPrefix(IntNumber.map(ProjectId.apply)) { id =>
       pathEndOrSingleSlash {
         get {
-          complete(projectService.getProject(id).map{
+          complete(projectService.getProject(id).map {
             case Some(project) => StatusCodes.OK -> project.asJson
             case None => StatusCodes.NotFound -> id.asJson
           })

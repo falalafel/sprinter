@@ -25,6 +25,14 @@ class ProjectSpec extends TemplateSpec with TestHelpers {
       }
     }
 
+    "get project" in {
+      println(s"/project/${idUpdate.id}")
+      Get(s"/project/${idUpdate.id}") ~> Route.seal(routes) ~> check {
+        status shouldBe StatusCodes.OK
+        println(responseAs[String])
+      }
+    }
+
     "post project" in {
       Post("/project").withEntity(ContentTypes.`application/json`, projectMock.asJson.toString) ~>
         Route.seal(routes) ~> check {
