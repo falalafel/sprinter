@@ -3,9 +3,7 @@ import io.circe.generic.extras.semiauto._
 import io.circe.generic.extras.defaults._
 import user.domain._
 
-
 package object user {
-
   implicit val userDecoder: Decoder[User] = deriveDecoder
   implicit val userEncoder: Encoder[User] = deriveEncoder
   implicit val userIdDecoder: Decoder[UserId] = deriveUnwrappedDecoder

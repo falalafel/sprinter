@@ -4,7 +4,6 @@ import user.domain._
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.ProvenShape
 
-
 object Users {
   implicit val userIdImpl: BaseColumnType[UserId] = MappedColumnType.base(_.id, UserId.apply)
   implicit val fullNameImpl: BaseColumnType[FullName] = MappedColumnType.base(_.name, FullName.apply)

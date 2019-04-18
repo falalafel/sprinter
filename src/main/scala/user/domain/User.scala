@@ -2,7 +2,6 @@ package user.domain
 
 import scala.util.Random
 
-
 object UserId {
   def generate: UserId = UserId(Random.nextInt().abs)
 }
@@ -24,11 +23,11 @@ case class UserUpdate(name: Option[FullName],
                       password: Option[Password],
                       role: Option[Role]) {
   def update(user: User) : User =
-    User(user.userId: UserId,
-         name.getOrElse(user.name): FullName,
-         mail.getOrElse(user.mail): Mail,
-         password.getOrElse(user.password): Password,
-         role.getOrElse(user.role): Role)
+    User(user.userId,
+         name.getOrElse(user.name),
+         mail.getOrElse(user.mail),
+         password.getOrElse(user.password),
+         role.getOrElse(user.role))
 }
 
 case class UserCreate(name: FullName,

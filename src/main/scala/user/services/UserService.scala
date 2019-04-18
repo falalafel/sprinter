@@ -1,6 +1,5 @@
 package user.services
 
-
 import user.domain.{User, UserId, UserUpdate}
 import user.storages.UserStorage
 import slick.jdbc.PostgresProfile.api._

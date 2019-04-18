@@ -27,7 +27,7 @@ class UserRoutes(userService: UserService)
         pathEndOrSingleSlash {
           get {
             complete(userService.getUser(id).map{
-              case Some(xd) => StatusCodes.NoContent -> xd.asJson
+              case Some(user) => StatusCodes.NoContent -> user.asJson
               case None => StatusCodes.NotFound -> id.asJson
             })
           } ~
