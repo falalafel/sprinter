@@ -29,7 +29,13 @@ class ProjectService(db: Database, projectStorage: ProjectStorage)
     db.run(query.value)
   }
 
-  def deleteProject(projectId: ProjectId): Future[Int] =
-    db.run(projectStorage.deleteProject(projectId))
+  def deleteProject(projectId: ProjectId): Future[Option[Int]] = {
+    val query = for {
+      _ <- OptionT(projectStorage.getProjectById(projectId))
+      result <- OptionT.liftF(projectStorage.deleteProject(projectId))
+    } yield result
+
+    db.run(query.value)
+  }
 
 }

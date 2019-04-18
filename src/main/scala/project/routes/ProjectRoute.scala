@@ -26,18 +26,24 @@ class ProjectRoute(projectService: ProjectService)
     pathPrefix(IntNumber.map(ProjectId.apply)) { id =>
       pathEndOrSingleSlash {
         get {
-          complete(projectService.getProject(id).map{
-            case Some(xd) => StatusCodes.NoContent -> xd.asJson
+          complete(projectService.getProject(id).map {
+            case Some(project) => StatusCodes.OK -> project.asJson
             case None => StatusCodes.NotFound -> id.asJson
           })
         } ~
         patch {
           entity(as[ProjectUpdate]) { projectUpdate =>
-            complete(projectService.updateProject(id, projectUpdate))
+            complete(projectService.updateProject(id, projectUpdate).map {
+              case Some(i) => StatusCodes.NoContent -> i.asJson
+              case None => StatusCodes.NotFound -> id.asJson
+            })
           }
         } ~
         delete {
-          complete(projectService.deleteProject(id))
+          complete(projectService.deleteProject(id).map {
+            case Some(i) => StatusCodes.NoContent -> i.asJson
+            case None => StatusCodes.NotFound -> id.asJson
+          })
         }
       }
     }
