@@ -33,7 +33,7 @@ trait MainContext {
   lazy val userService: UserService = wire[UserService]
   lazy val userRoutes: UserRoutes = wire[UserRoutes]
 
-  val routes = projectRoutes.projectRoutes ~ userRoutes.userRoutes
+  lazy val routes = projectRoutes.projectRoutes ~ userRoutes.userRoutes
 }
 
 object Main extends App with MainContext {
