@@ -1,15 +1,13 @@
 package project
 
-import org.scalatest.{BeforeAndAfter, Matchers, WordSpec}
 import akka.http.scaladsl.model.{ContentTypes, StatusCodes}
 import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.testkit.ScalatestRouteTest
-import main.MainContext
 import ProjectSpecHelpers._
 import io.circe.syntax._
 import project.domain.{ProjectClosingStatus, ProjectName}
+import utils.{TemplateSpec, TestHelpers}
 
-class ProjectSpec extends WordSpec with Matchers with ScalatestRouteTest with MainContext with BeforeAndAfter {
+class ProjectSpec extends TemplateSpec with TestHelpers {
 
   val projectMock = testProjectCreate
 

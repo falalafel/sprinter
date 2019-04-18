@@ -29,7 +29,13 @@ class UserService(db: Database, userStorage: UserStorage)
     db.run(query.value)
   }
 
-  def deleteUser(userId: UserId): Future[Int] =
-    db.run(userStorage.deleteUser(userId))
+  def deleteUser(userId: UserId): Future[Option[Int]] = {
+    val query = for {
+      _ <- OptionT(userStorage.getUserById(userId))
+      result <- OptionT.liftF(userStorage.deleteUser(userId))
+    } yield result
+
+    db.run(query.value)
+  }
 
 }

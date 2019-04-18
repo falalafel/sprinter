@@ -2,6 +2,7 @@ package main
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
+import akka.http.scaladsl.server.Directives._
 import akka.stream.{ActorMaterializer, Materializer}
 import com.softwaremill.macwire._
 import com.typesafe.config.ConfigFactory
@@ -9,6 +10,9 @@ import project.routes.ProjectRoute
 import project.services.ProjectService
 import project.storages.ProjectStorage
 import slick.jdbc.PostgresProfile.api._
+import user.routes.UserRoutes
+import user.services.UserService
+import user.storages.UserStorage
 import scala.concurrent.ExecutionContext
 
 trait MainContext {
@@ -23,9 +27,13 @@ trait MainContext {
 
   lazy val projectStorage: ProjectStorage = wire[ProjectStorage]
   lazy val projectService: ProjectService = wire[ProjectService]
-  lazy val projectRouter: ProjectRoute    = wire[ProjectRoute]
+  lazy val projectRoutes: ProjectRoute    = wire[ProjectRoute]
 
-  val routes = projectRouter.projectRoutes
+  lazy val userStorage: UserStorage = wire[UserStorage]
+  lazy val userService: UserService = wire[UserService]
+  lazy val userRoutes: UserRoutes = wire[UserRoutes]
+
+  val routes = projectRoutes.projectRoutes ~ userRoutes.userRoutes
 }
 
 object Main extends App with MainContext {
