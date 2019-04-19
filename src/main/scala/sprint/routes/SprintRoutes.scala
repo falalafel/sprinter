@@ -36,11 +36,17 @@ class SprintRoutes(sprintService: SprintService)
       } ~
       patch {
         entity(as[SprintUpdate]) { sprintUpdate =>
-          complete(sprintService.updateSprint(projectId, sprintId, sprintUpdate))
+          complete(sprintService.updateSprint(projectId, sprintId, sprintUpdate).map {
+            case Some(sprint) => StatusCodes.NoContent -> sprint.asJson
+            case None => StatusCodes.NotFound -> (projectId, sprintId).asJson
+          })
         }
       } ~
       delete {
-        complete(sprintService.deleteSprint(projectId, sprintId))
+        complete(sprintService.deleteSprint(projectId, sprintId).map {
+          case Some(sprint) => StatusCodes.NoContent -> sprint.asJson
+          case None => StatusCodes.NotFound -> (projectId, sprintId).asJson
+        })
       }
     }
   }

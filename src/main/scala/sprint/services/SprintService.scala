@@ -31,6 +31,12 @@ class SprintService(db: Database, sprintStorage: SprintStorage)
     db.run(query.value)
   }
 
-  def deleteSprint(projectId: ProjectId, sprintId: SprintId): Future[Int] =
-    db.run(sprintStorage.deleteSprint(projectId, sprintId))
+  def deleteSprint(projectId: ProjectId, sprintId: SprintId): Future[Option[Int]] = {
+    val query = for {
+      _ <- OptionT(sprintStorage.getSprint(projectId, sprintId))
+      result <- OptionT.liftF(sprintStorage.deleteSprint(projectId, sprintId))
+    } yield result
+
+    db.run(query.value)
+  }
 }
