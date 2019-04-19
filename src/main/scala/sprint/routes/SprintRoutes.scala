@@ -11,6 +11,7 @@ import sprint.services.SprintService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 
 import scala.concurrent.ExecutionContext
+import sprint.sprintMarshalling._
 
 
 class SprintRoutes(sprintService: SprintService)

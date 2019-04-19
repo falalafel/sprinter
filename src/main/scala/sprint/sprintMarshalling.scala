@@ -1,4 +1,4 @@
-import java.time.LocalDate
+package sprint
 
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.extras.semiauto._
@@ -6,7 +6,7 @@ import io.circe.generic.extras.defaults._
 import sprint.domain._
 
 
-package object sprint {
+package object sprintMarshalling {
 
   implicit val sprintIdEncoder: Encoder[SprintId] = deriveUnwrappedEncoder
   implicit val sprintIdDecoder: Decoder[SprintId] = deriveUnwrappedDecoder
