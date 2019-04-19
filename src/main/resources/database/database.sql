@@ -4,7 +4,7 @@ comment on schema public is 'standard public schema';
 
 alter schema public owner to postgres;
 
-create table if not exists "user"
+create table if not exists user
 (
 	userid integer not null
 		constraint users_pk
@@ -15,16 +15,16 @@ create table if not exists "user"
 	role integer not null
 );
 
-alter table "user" owner to postgres;
+alter table user owner to postgres;
 
 create unique index if not exists users_userid_uindex
-	on "user" (userid);
+	on user (userid);
 
 create table if not exists week
 (
 	userid integer not null
 		constraint week_users_userid_fk
-			references "user",
+			references user,
 	day integer not null,
 	hours integer not null,
 	constraint week_pk
@@ -40,7 +40,7 @@ create table if not exists session
 			primary key,
 	userid integer not null
 		constraint session_users_userid_fk
-			references "user",
+			references user,
 	cookiehash varchar(255) not null,
 	timestamp timestamp not null
 );
@@ -56,7 +56,7 @@ create table if not exists project
 		constraint project_pk
 			primary key,
 	name varchar(50) not null,
-	startdate timestamp not null,
+	startdate date not null,
 	duration integer not null,
 	closed boolean not null
 );
@@ -89,7 +89,7 @@ create table if not exists sprint
 	projectid integer not null
 		constraint sprint_project_projectid_fk
 			references project,
-	startdate timestamp not null,
+	startdate date not null,
 	closed boolean not null
 );
 
