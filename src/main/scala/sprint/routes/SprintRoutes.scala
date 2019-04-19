@@ -17,7 +17,7 @@ import sprint.sprintMarshalling._
 class SprintRoutes(sprintService: SprintService)
   (implicit mat: Materializer, ec: ExecutionContext) {
 
-  def sprintRoutes(projectId: ProjectId): Route = pathPrefix("sprint") {
+  def sprintRoutes(projectId: ProjectId): Route = {
 
     (get & pathEndOrSingleSlash) {
       complete(sprintService.getSprintsFromProject(projectId))
@@ -31,7 +31,7 @@ class SprintRoutes(sprintService: SprintService)
         pathEndOrSingleSlash {
           get {
             complete(sprintService.getSprint(id).map {
-              case Some(xd) => StatusCodes.NoContent -> xd.asJson
+              case Some(sprint) => StatusCodes.OK -> sprint.asJson
               case None => StatusCodes.NotFound -> id.asJson
             })
           } ~

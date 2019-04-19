@@ -10,9 +10,13 @@ import project.routes.ProjectRoute
 import project.services.ProjectService
 import project.storages.ProjectStorage
 import slick.jdbc.PostgresProfile.api._
+import sprint.routes.SprintRoutes
+import sprint.services.SprintService
+import sprint.storages.SprintStorage
 import user.routes.UserRoutes
 import user.services.UserService
 import user.storages.UserStorage
+
 import scala.concurrent.ExecutionContext
 
 trait MainContext {
@@ -32,6 +36,10 @@ trait MainContext {
   lazy val userStorage: UserStorage = wire[UserStorage]
   lazy val userService: UserService = wire[UserService]
   lazy val userRoutes: UserRoutes = wire[UserRoutes]
+
+  lazy val sprintStorage: SprintStorage = wire[SprintStorage]
+  lazy val sprintService: SprintService = wire[SprintService]
+  lazy val sprintRoutes: SprintRoutes = wire[SprintRoutes]
 
   lazy val routes = projectRoutes.projectRoutes ~ userRoutes.userRoutes
 }
