@@ -15,15 +15,15 @@ class SprintService(db: Database, sprintStorage: SprintStorage)
   def getSprintsFromProject(projectId: ProjectId): Future[Seq[Sprint]] =
     db.run(sprintStorage.getSprintsByProjectId(projectId))
 
-  def getSprint(sprintId: SprintId): Future[Option[Sprint]] =
-    db.run(sprintStorage.getSprintById(sprintId))
+  def getSprint(projectId: ProjectId, sprintId: SprintId): Future[Option[Sprint]] =
+    db.run(sprintStorage.getSprint(projectId, sprintId))
 
-  def createSprint(sprint: Sprint): Future[SprintId] =
-    db.run(sprintStorage.insertSprint(sprint).map(_ => sprint.sprintId))
+  def createSprint(sprint: Sprint): Future[(ProjectId, SprintId)] =
+    db.run(sprintStorage.insertSprint(sprint).map(_ => (sprint.projectId, sprint.sprintId)))
 
-  def updateSprint(sprintId: SprintId, sprintUpdate: SprintUpdate): Future[Option[Int]] = {
+  def updateSprint(projectId: ProjectId, sprintId: SprintId, sprintUpdate: SprintUpdate): Future[Option[Int]] = {
     val query = for {
-      sprint <- OptionT(sprintStorage.getSprintById(sprintId))
+      sprint <- OptionT(sprintStorage.getSprint(projectId, sprintId))
       updatedSprint = sprintUpdate.update(sprint)
       result <- OptionT.liftF(sprintStorage.updateSprint(updatedSprint))
     } yield result
@@ -31,6 +31,6 @@ class SprintService(db: Database, sprintStorage: SprintStorage)
     db.run(query.value)
   }
 
-  def deleteSprint(sprintId: SprintId): Future[Int] =
-    db.run(sprintStorage.deleteSprint(sprintId))
+  def deleteSprint(projectId: ProjectId, sprintId: SprintId): Future[Int] =
+    db.run(sprintStorage.deleteSprint(projectId, sprintId))
 }

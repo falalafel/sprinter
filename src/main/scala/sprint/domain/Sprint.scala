@@ -7,6 +7,8 @@ import project.domain.ProjectId
 import scala.util.Random
 
 object SprintId {
+
+  // TODO: generate sprintId based on current project sprints count
   def generate: SprintId = SprintId(Random.nextInt().abs)
 }
 
@@ -15,8 +17,8 @@ case class SprintStartDate(date: LocalDate) extends AnyVal
 case class SprintClosingStatus(status: Boolean) extends AnyVal
 
 case class Sprint(
-  sprintId: SprintId,
   projectId: ProjectId,
+  sprintId: SprintId,
   startDate: SprintStartDate,
   closingStatus: SprintClosingStatus
 )
@@ -26,8 +28,8 @@ case class SprintUpdate(
 ) {
   def update(sprint: Sprint): Sprint =
     Sprint(
-      sprint.sprintId,
       sprint.projectId,
+      sprint.sprintId,
       sprint.startDate,
       closingStatus.getOrElse(sprint.closingStatus)
     )
@@ -38,8 +40,8 @@ case class SprintCreate(
   startDate: SprintStartDate
 ) {
   def toSprint = Sprint(
-    SprintId.generate,
     projectId,
+    SprintId.generate,
     startDate,
     SprintClosingStatus(false)
   )

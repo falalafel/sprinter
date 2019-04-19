@@ -15,7 +15,7 @@ object Sprints {
 class Sprints(tag: Tag) extends Table[Sprint](tag, "sprint"){
   import Sprints._
 
-  def id: Rep[SprintId] = column[SprintId]("sprintid", O.PrimaryKey)
+  def sprintId: Rep[SprintId] = column[SprintId]("sprintid")
 
   def projectId: Rep[ProjectId] = column[ProjectId]("projectid")
 
@@ -23,5 +23,5 @@ class Sprints(tag: Tag) extends Table[Sprint](tag, "sprint"){
 
   def closingStatus: Rep[SprintClosingStatus] = column[SprintClosingStatus]("closed")
 
-  def * : ProvenShape[Sprint] = (id, projectId, startDate, closingStatus) <> (Sprint.tupled, Sprint.unapply)
+  def * : ProvenShape[Sprint] = (projectId, sprintId, startDate, closingStatus) <> (Sprint.tupled, Sprint.unapply)
 }
