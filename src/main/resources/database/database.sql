@@ -4,7 +4,7 @@ comment on schema public is 'standard public schema';
 
 alter schema public owner to postgres;
 
-create table if not exists user
+create table if not exists "user"
 (
 	userid integer not null
 		constraint users_pk
@@ -15,16 +15,16 @@ create table if not exists user
 	role integer not null
 );
 
-alter table user owner to postgres;
+alter table "user" owner to postgres;
 
 create unique index if not exists users_userid_uindex
-	on user (userid);
+	on "user" (userid);
 
 create table if not exists week
 (
 	userid integer not null
 		constraint week_users_userid_fk
-			references user,
+			references "user",
 	day integer not null,
 	hours integer not null,
 	constraint week_pk
@@ -40,7 +40,7 @@ create table if not exists session
 			primary key,
 	userid integer not null
 		constraint session_users_userid_fk
-			references user,
+			references "user",
 	cookiehash varchar(255) not null,
 	timestamp timestamp not null
 );
@@ -83,14 +83,15 @@ alter table projectmembership owner to postgres;
 
 create table if not exists sprint
 (
-	sprintid integer not null
-		constraint sprint_pk
-			primary key,
+	sprintid integer not null,
 	projectid integer not null
 		constraint sprint_project_projectid_fk
 			references project,
 	startdate date not null,
-	closed boolean not null
+	closed boolean not null,
+
+  constraint sprint_pk
+			primary key (sprintid, projectid)
 );
 
 alter table sprint owner to postgres;
@@ -100,9 +101,8 @@ create unique index if not exists sprint_sprintid_uindex
 
 create table if not exists declaration
 (
-	sprintid integer not null
-		constraint declaration_sprint_sprintid_fk
-			references sprint,
+	projectid integer not null,
+	sprintid integer not null,
 	userid integer not null
 		constraint declaration_users_userid_fk
 			references "user",
@@ -110,7 +110,11 @@ create table if not exists declaration
 	workneeded integer not null,
 	comment varchar(255),
 	constraint declaration_pk
-		primary key (sprintid, userid)
+		primary key (sprintid, projectid, userid),
+
+	constraint declaration_sprint_fk
+		foreign key (projectid, sprintid)
+			references sprint(projectid, sprintid)
 );
 
 alter table declaration owner to postgres;
