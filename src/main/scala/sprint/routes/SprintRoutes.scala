@@ -11,7 +11,6 @@ import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import io.circe.syntax._
 
 import scala.concurrent.ExecutionContext
-import sprint.sprintMarshalling._
 
 
 class SprintRoutes(sprintService: SprintService)
@@ -31,9 +30,9 @@ class SprintRoutes(sprintService: SprintService)
     pathPrefix(IntNumber.map(SprintId.apply)) { sprintId =>
       get {
         complete(sprintService.getSprint(projectId, sprintId).map {
-              case Some(sprint) => StatusCodes.OK -> sprint.asJson
-              case None => StatusCodes.NotFound -> (projectId, sprintId).asJson
-            })
+          case Some(sprint) => StatusCodes.OK -> sprint.asJson
+          case None => StatusCodes.NotFound -> (projectId, sprintId).asJson
+        })
       } ~
       patch {
         entity(as[SprintUpdate]) { sprintUpdate =>
