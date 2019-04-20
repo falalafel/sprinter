@@ -20,31 +20,29 @@ libraryDependencies ++= {
   val catsSlickVersion = "0.9.1"
 
   Seq(
-    "com.typesafe.slick"       %% "slick"           % slickVersion,
-    "com.typesafe.slick"       %% "slick-hikaricp"  % slickVersion,
-    "com.typesafe.akka"        %% "akka-http"       % akkaHttpVersion,
-    "com.typesafe.akka"        %% "akka-stream"     % akkaVersion,
-    "com.typesafe.akka"        %% "akka-actor"      % akkaVersion,
-    "org.scalatest"            %% "scalatest"       % scalaTestVersion % "test,it",
-    "com.softwaremill.macwire" %% "macros"          % macwireVersion,
-    "io.circe"                 %% "circe-core"      % circeVersion,
-    "io.circe"                 %% "circe-generic"   % circeVersion,
-    "io.circe"                 %% "circe-parser"    % circeVersion,
+    "com.typesafe.slick"       %% "slick"                % slickVersion,
+    "com.typesafe.slick"       %% "slick-hikaricp"       % slickVersion,
+    "com.typesafe.akka"        %% "akka-http"            % akkaHttpVersion,
+    "com.typesafe.akka"        %% "akka-stream"          % akkaVersion,
+    "com.typesafe.akka"        %% "akka-actor"           % akkaVersion,
+    "org.scalatest"            %% "scalatest"            % scalaTestVersion % "test,it",
+    "com.softwaremill.macwire" %% "macros"               % macwireVersion,
+    "io.circe"                 %% "circe-core"           % circeVersion,
+    "io.circe"                 %% "circe-generic"        % circeVersion,
+    "io.circe"                 %% "circe-parser"         % circeVersion,
     "io.circe"                 %% "circe-generic-extras" % circeVersion,
-    "de.heikoseeberger"        %% "akka-http-circe" % akkaCirceVersion,
-    "org.postgresql"           % "postgresql"       % postgresVersion,
-    "org.slf4j"                % "slf4j-nop"        % slf4jVersion,
-    "org.typelevel"            %% "cats-core"       % catsVersion,
-    "com.rms.miu"              %% "slick-cats"      % catsSlickVersion,
-    "com.typesafe.akka"        %% "akka-stream-testkit" % akkaVersion,
-    "com.typesafe.akka"        %% "akka-http-testkit"   % akkaHttpVersion
+    "de.heikoseeberger"        %% "akka-http-circe"      % akkaCirceVersion,
+    "org.postgresql"           % "postgresql"            % postgresVersion,
+    "org.slf4j"                % "slf4j-nop"             % slf4jVersion,
+    "org.typelevel"            %% "cats-core"            % catsVersion,
+    "com.rms.miu"              %% "slick-cats"           % catsSlickVersion,
+    "com.typesafe.akka"        %% "akka-stream-testkit"  % akkaVersion,
+    "com.typesafe.akka"        %% "akka-http-testkit"    % akkaHttpVersion
   )
 
 }
 
-lazy val root = (project in file("."))
-  .configs(IntegrationTest)
-  .settings(
-    Defaults.itSettings:  _*
-    // other settings here
-  )
+configs(IntegrationTest)
+Seq(Defaults.itSettings:  _*)
+Revolver.settings
+enablePlugins(JavaAppPackaging)

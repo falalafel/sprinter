@@ -9,8 +9,14 @@ import scala.concurrent.{Await, Future}
 trait TestHelpers {
 
   def result[T](futureResult: Future[T]): T =
-    Await.result(futureResult, 5.seconds)
+    Await.result(futureResult, 15.seconds)
 
 }
 
-trait TemplateSpec extends WordSpec with Matchers with ScalatestRouteTest with MainContext with BeforeAndAfter
+trait TemplateSpec extends WordSpec with Matchers with ScalatestRouteTest with MainContext with BeforeAndAfter {
+
+  override def afterAll {
+    database.close()
+  }
+
+}
