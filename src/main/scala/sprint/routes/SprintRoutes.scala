@@ -20,7 +20,7 @@ class SprintRoutes(sprintService: SprintService)
     } ~
     post {
       entity(as[SprintCreate]) { sprintCreate =>
-        complete(StatusCodes.Created, sprintService.createSprint(sprintCreate.toSprint))
+        complete(StatusCodes.Created, sprintService.createSprint(sprintCreate.toSprint(projectId)))
       }
     } ~
     pathPrefix(IntNumber.map(SprintId.apply)) { sprintId =>
