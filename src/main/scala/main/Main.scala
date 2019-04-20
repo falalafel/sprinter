@@ -7,6 +7,9 @@ import akka.http.scaladsl.server.Directives._
 import akka.stream.{ActorMaterializer, Materializer}
 import com.softwaremill.macwire._
 import com.typesafe.config.ConfigFactory
+import declaration.routes.DeclarationRoutes
+import declaration.services.DeclarationService
+import declaration.storages.DeclarationStorage
 import project.routes.ProjectRoute
 import project.services.ProjectService
 import project.storages.ProjectStorage
@@ -51,6 +54,9 @@ trait MainContext {
   lazy val weekStorage: WeekStorage = wire[WeekStorage]
   lazy val weekService: WeekService = wire[WeekService]
   lazy val weekRoutes: WeekRoute = wire[WeekRoute]
+  lazy val declarationStorage: DeclarationStorage = wire[DeclarationStorage]
+  lazy val declarationService: DeclarationService = wire[DeclarationService]
+  lazy val declarationRoutes: DeclarationRoutes = wire[DeclarationRoutes]
 
   lazy val mHeaders = respondWithHeaders(List(
     `Access-Control-Allow-Origin`.*,
