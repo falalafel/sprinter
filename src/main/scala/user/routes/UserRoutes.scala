@@ -8,10 +8,11 @@ import user.services.UserService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import user.domain.{UserCreate, UserId, UserUpdate}
 import io.circe.syntax._
+import session.routes.SessionRoutes
 import scala.concurrent.ExecutionContext
 
-class UserRoutes(userService: UserService)
-                  (implicit mat: Materializer, ec: ExecutionContext) {
+class UserRoutes(userService: UserService, sessionRoutes: SessionRoutes)
+                (implicit mat: Materializer, ec: ExecutionContext) {
 
   def userRoutes: Route = pathPrefix("user") {
 
@@ -26,8 +27,8 @@ class UserRoutes(userService: UserService)
       pathPrefix(IntNumber.map(UserId.apply)) { id =>
         pathEndOrSingleSlash {
           get {
-            complete(userService.getUser(id).map{
-              case Some(user) => StatusCodes.NoContent -> user.asJson
+            complete(userService.getUser(id).map {
+              case Some(user) => StatusCodes.OK -> user.asJson
               case None => StatusCodes.NotFound -> id.asJson
             })
           } ~
@@ -39,12 +40,14 @@ class UserRoutes(userService: UserService)
                 })
               }
             } ~
-              delete {
-                complete(userService.deleteUser(id).map {
-                  case Some(i) => StatusCodes.NoContent -> i.asJson
-                  case None => StatusCodes.NotFound -> id.asJson
-                })
-              }
+            delete {
+              complete(userService.deleteUser(id).map {
+                case Some(i) => StatusCodes.NoContent -> i.asJson
+                case None => StatusCodes.NotFound -> id.asJson
+              })
+            }
+        } ~ pathPrefix("session") {
+          sessionRoutes.sessionRoutes(id)
         }
       }
   }
