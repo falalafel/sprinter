@@ -33,10 +33,9 @@ case class SprintUpdate(
 }
 
 case class SprintCreate(
-  projectId: ProjectId,
   startDate: SprintStartDate
 ) {
-  def toSprint = Sprint(
+  def toSprint(projectId: ProjectId) = Sprint(
     projectId,
     SprintId.generate,
     startDate,

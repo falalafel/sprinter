@@ -12,10 +12,10 @@ class SprintSpec extends TemplateSpec with TestHelpers {
   val projectCreateQuery = projectService.createProject(projectCreate.toProject)
   val projectId = result(projectCreateQuery)
 
-  val sprintCreateQuery = sprintService.createSprint(sprintCreate(projectId).toSprint)
+  val sprintCreateQuery = sprintService.createSprint(sprintCreate.toSprint(projectId))
   val (_, sprintId) = result(sprintCreateQuery)
 
-  val sprintCreateMock = sprintCreate(projectId).toSprint
+  val sprintCreateMock = sprintCreate.toSprint(projectId)
   val sprintUpdateMock = sprintUpdate
 
   "SprintSpec" should {
