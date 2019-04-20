@@ -56,7 +56,7 @@ create table if not exists project
 		constraint project_pk
 			primary key,
 	name varchar(50) not null,
-	startdate timestamp not null,
+	startdate date not null,
 	duration integer not null,
 	closed boolean not null
 );
@@ -83,14 +83,15 @@ alter table projectmembership owner to postgres;
 
 create table if not exists sprint
 (
-	sprintid integer not null
-		constraint sprint_pk
-			primary key,
+	sprintid integer not null,
 	projectid integer not null
 		constraint sprint_project_projectid_fk
 			references project,
-	startdate timestamp not null,
-	closed boolean not null
+	startdate date not null,
+	closed boolean not null,
+
+  constraint sprint_pk
+			primary key (sprintid, projectid)
 );
 
 alter table sprint owner to postgres;
@@ -100,9 +101,8 @@ create unique index if not exists sprint_sprintid_uindex
 
 create table if not exists declaration
 (
-	sprintid integer not null
-		constraint declaration_sprint_sprintid_fk
-			references sprint,
+	projectid integer not null,
+	sprintid integer not null,
 	userid integer not null
 		constraint declaration_users_userid_fk
 			references "user",
@@ -110,7 +110,11 @@ create table if not exists declaration
 	workneeded integer not null,
 	comment varchar(255),
 	constraint declaration_pk
-		primary key (sprintid, userid)
+		primary key (sprintid, projectid, userid),
+
+	constraint declaration_sprint_fk
+		foreign key (projectid, sprintid)
+			references sprint(projectid, sprintid)
 );
 
 alter table declaration owner to postgres;
