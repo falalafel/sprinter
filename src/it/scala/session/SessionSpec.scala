@@ -9,27 +9,19 @@ import user.UserSpecHelpers.testUserCreate
 
 class SessionSpec extends TemplateSpec with TestHelpers {
 
-  val userMock = testUserCreate
-  val userUpdateMock = userService.createUser(userMock.toUser)
-  val idUpdate = result(userUpdateMock)
-
-  val sessionMock = testSessionCreate(idUpdate)
+  val userMock = userService.createUser(testUserCreate.toUser)
+  val userId = result(userMock)
+  val sessionMock = testSessionCreate(userId)
 
   "SessionSpec" should {
     "get session list" in {
-      Get("/session") ~> Route.seal(routes) ~> check {
-        status shouldBe StatusCodes.OK
-      }
-    }
-
-    "get session" in {
-      Get(s"/session/${idUpdate.id}") ~> Route.seal(routes) ~> check {
+      Get(s"/user/${userId.id}/session") ~> Route.seal(routes) ~> check {
         status shouldBe StatusCodes.OK
       }
     }
 
     "post session" in {
-      Post("/session").withEntity(ContentTypes.`application/json`, sessionMock.asJson.toString) ~>
+      Post(s"/user/${userId.id}/session").withEntity(ContentTypes.`application/json`, sessionMock.asJson.toString) ~>
         Route.seal(routes) ~> check {
         status shouldBe StatusCodes.Created
       }

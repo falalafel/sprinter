@@ -1,17 +1,22 @@
-import io.circe.{Decoder, Encoder}
+import java.sql.Timestamp
+
+import io.circe.Decoder.Result
+import io.circe.{Decoder, Encoder, HCursor, Json}
 import io.circe.generic.extras.semiauto._
 import io.circe.generic.extras.defaults._
 import session.domain._
-import user.domain.UserId
 
 package object session {
+
+  implicit val TimestampFormat : Encoder[Timestamp] with Decoder[Timestamp] = new Encoder[Timestamp] with Decoder[Timestamp] {
+    override def apply(a: Timestamp): Json = Encoder.encodeLong.apply(a.getTime)
+    override def apply(c: HCursor): Result[Timestamp] = Decoder.decodeLong.map(s => new Timestamp(s)).apply(c)
+  }
+
   implicit val sessionDecoder: Decoder[Session] = deriveDecoder
   implicit val sessionEncoder: Encoder[Session] = deriveEncoder
   implicit val sessionIdDecoder: Decoder[SessionId] = deriveUnwrappedDecoder
   implicit val sessionIdEncoder: Encoder[SessionId] = deriveUnwrappedEncoder
-
-  implicit val userIdDecoder: Decoder[UserId] = deriveUnwrappedDecoder
-  implicit val userIdEncoder: Encoder[UserId] = deriveUnwrappedEncoder
   implicit val sessionCreateDecoder: Decoder[SessionCreate] = deriveDecoder
   implicit val sessionCreateEncoder: Encoder[SessionCreate] = deriveEncoder
   implicit val sessionCookieHashDecoder: Decoder[SessionCookieHash] = deriveUnwrappedDecoder

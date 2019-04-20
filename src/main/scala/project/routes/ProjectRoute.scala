@@ -20,36 +20,36 @@ class ProjectRoute(projectService: ProjectService, sprintRoutes: SprintRoutes)
     (get & pathEndOrSingleSlash) {
       complete(projectService.getProjects)
     } ~
-    post {
-      entity(as[ProjectCreate]) { projectCreate =>
-        complete(StatusCodes.Created, projectService.createProject(projectCreate.toProject))
-      }
-    } ~
-    pathPrefix(IntNumber.map(ProjectId.apply)) { id =>
-      pathEndOrSingleSlash {
-        get {
-          complete(projectService.getProject(id).map {
-            case Some(project) => StatusCodes.OK -> project.asJson
-            case None => StatusCodes.NotFound -> id.asJson
-          })
-        } ~
-        patch {
-          entity(as[ProjectUpdate]) { projectUpdate =>
-            complete(projectService.updateProject(id, projectUpdate).map {
-              case Some(i) => StatusCodes.NoContent -> i.asJson
+      post {
+        entity(as[ProjectCreate]) { projectCreate =>
+          complete(StatusCodes.Created, projectService.createProject(projectCreate.toProject))
+        }
+      } ~
+      pathPrefix(IntNumber.map(ProjectId.apply)) { id =>
+        pathEndOrSingleSlash {
+          get {
+            complete(projectService.getProject(id).map {
+              case Some(project) => StatusCodes.OK -> project.asJson
               case None => StatusCodes.NotFound -> id.asJson
             })
-          }
-        } ~
-        delete {
-          complete(projectService.deleteProject(id).map {
-            case Some(i) => StatusCodes.NoContent -> i.asJson
-            case None => StatusCodes.NotFound -> id.asJson
-          })
+          } ~
+            patch {
+              entity(as[ProjectUpdate]) { projectUpdate =>
+                complete(projectService.updateProject(id, projectUpdate).map {
+                  case Some(i) => StatusCodes.NoContent -> i.asJson
+                  case None => StatusCodes.NotFound -> id.asJson
+                })
+              }
+            } ~
+            delete {
+              complete(projectService.deleteProject(id).map {
+                case Some(i) => StatusCodes.NoContent -> i.asJson
+                case None => StatusCodes.NotFound -> id.asJson
+              })
+            }
+        } ~ pathPrefix("sprint") {
+          sprintRoutes.sprintRoutes(id)
         }
-    } ~ pathPrefix("sprint") {
-        sprintRoutes.sprintRoutes(id)
       }
-    }
   }
 }

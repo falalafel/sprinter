@@ -15,8 +15,6 @@ class SprintRoutes(sprintService: SprintService)
   (implicit mat: Materializer, ec: ExecutionContext) {
 
   def sprintRoutes(projectId: ProjectId): Route = {
-
-
     (get & pathEndOrSingleSlash) {
       complete(sprintService.getSprintsFromProject(projectId))
     } ~

@@ -21,10 +21,8 @@ case class Session(sessionId: SessionId,
                    cookieHash: SessionCookieHash,
                    timeStamp: SessionTimeStamp)
 
-
-case class SessionCreate(userId: UserId,
-                         cookieHash: SessionCookieHash) {
-  def toSession =
+case class SessionCreate(cookieHash: SessionCookieHash) {
+  def toSession(userId: UserId) =
     Session(SessionId.generate,
             userId,
             cookieHash,

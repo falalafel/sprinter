@@ -1,6 +1,5 @@
 package session.storages
 
-import project.domain.Project
 import session.domain.Session
 import user.domain.UserId
 import slick.jdbc.PostgresProfile.api._
@@ -10,8 +9,8 @@ class SessionStorage {
 
   def getAllSessions: DBIO[Seq[Session]] = sessions.result
 
-  def getSessionByUserId(userId: UserId): DBIO[Option[Session]] =
-    sessions.filter(_.userId === userId).result.headOption
+  def getSessionByUserId(userId: UserId): DBIO[Seq[Session]] =
+    sessions.filter(_.userId === userId).result
 
   def insertSession(session: Session): DBIO[Int] = sessions += session
 

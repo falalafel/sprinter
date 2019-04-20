@@ -12,7 +12,7 @@ class SessionService(db: Database, sessionStorage: SessionStorage)
   def getSessions: Future[Seq[Session]] =
     db.run(sessionStorage.getAllSessions)
 
-  def getSession(userId: UserId): Future[Option[Session]] =
+  def getSessionsByUser(userId: UserId): Future[Seq[Session]] =
     db.run(sessionStorage.getSessionByUserId(userId))
 
   def createSession(session: Session): Future[SessionId] =
