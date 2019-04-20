@@ -2,6 +2,7 @@ package main
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.headers._
 import akka.http.scaladsl.server.Directives._
 import akka.stream.{ActorMaterializer, Materializer}
 import com.softwaremill.macwire._
@@ -10,6 +11,9 @@ import project.routes.ProjectRoute
 import project.services.ProjectService
 import project.storages.ProjectStorage
 import slick.jdbc.PostgresProfile.api._
+import sprint.routes.SprintRoutes
+import sprint.services.SprintService
+import sprint.storages.SprintStorage
 import user.routes.UserRoutes
 import user.services.UserService
 import user.storages.UserStorage
@@ -33,7 +37,17 @@ trait MainContext {
   lazy val userService: UserService = wire[UserService]
   lazy val userRoutes: UserRoutes = wire[UserRoutes]
 
-  lazy val routes = projectRoutes.projectRoutes ~ userRoutes.userRoutes
+  lazy val sprintStorage: SprintStorage = wire[SprintStorage]
+  lazy val sprintService: SprintService = wire[SprintService]
+  lazy val sprintRoutes: SprintRoutes = wire[SprintRoutes]
+
+  lazy val headers = respondWithHeaders(List(
+    `Access-Control-Allow-Origin`.*,
+    `Access-Control-Allow-Credentials`(true),
+    `Access-Control-Allow-Headers`("Authorization",
+      "Content-Type", "X-Requested-With")))
+
+  lazy val routes = headers { projectRoutes.projectRoutes ~ userRoutes.userRoutes }
 }
 
 object Main extends App with MainContext {

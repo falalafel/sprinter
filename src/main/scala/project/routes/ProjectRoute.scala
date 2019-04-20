@@ -8,9 +8,11 @@ import project.services.ProjectService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import project.domain.{ProjectCreate, ProjectId, ProjectUpdate}
 import io.circe.syntax._
+import sprint.routes.SprintRoutes
+
 import scala.concurrent.ExecutionContext
 
-class ProjectRoute(projectService: ProjectService)
+class ProjectRoute(projectService: ProjectService, sprintRoutes: SprintRoutes)
                   (implicit mat: Materializer, ec: ExecutionContext) {
 
   def projectRoutes: Route = pathPrefix("project") {
@@ -45,6 +47,8 @@ class ProjectRoute(projectService: ProjectService)
             case None => StatusCodes.NotFound -> id.asJson
           })
         }
+    } ~ pathPrefix("sprint") {
+        sprintRoutes.sprintRoutes(id)
       }
     }
   }
