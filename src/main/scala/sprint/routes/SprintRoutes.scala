@@ -21,7 +21,7 @@ class SprintRoutes(sprintService: SprintService, declarationRoutes: DeclarationR
       complete(sprintService.getSprintsFromProject(projectId))
     } ~ post {
       entity(as[SprintCreate]) { sprintCreate =>
-        complete(StatusCodes.Created, sprintService.createSprint(sprintCreate.toSprint))
+        complete(StatusCodes.Created, sprintService.createSprint(sprintCreate.toSprint(projectId)))
       }
     } ~ pathPrefix(IntNumber.map(SprintId.apply)) { sprintId =>
       pathEndOrSingleSlash {

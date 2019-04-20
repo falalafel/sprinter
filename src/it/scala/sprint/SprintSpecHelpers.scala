@@ -8,12 +8,12 @@ import sprint.domain._
 object SprintSpecHelpers {
 
   def projectCreate = ProjectCreate(
-    ProjectName("proj-sprint-test"),
+    ProjectName("[sprint test] project"),
     ProjectStartDate(LocalDate.now()),
     SprintDuration(20)
   )
 
-  def sprintCreate(projectId: ProjectId) = SprintCreate(projectId, SprintStartDate(LocalDate.now()))
+  def sprintCreate = SprintCreate(SprintStartDate(LocalDate.now()))
 
   def sprintUpdate = SprintUpdate(Some(SprintClosingStatus(true)))
 
