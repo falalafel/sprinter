@@ -6,7 +6,6 @@ import cats.data.OptionT
 import project.domain.ProjectId
 import sprint.domain.{Sprint, SprintId, SprintUpdate}
 import sprint.storages.SprintStorage
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class SprintService(db: Database, sprintStorage: SprintStorage)

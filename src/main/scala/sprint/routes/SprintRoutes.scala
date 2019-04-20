@@ -9,9 +9,7 @@ import sprint.domain.{SprintCreate, SprintId, SprintUpdate}
 import sprint.services.SprintService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import io.circe.syntax._
-
 import scala.concurrent.ExecutionContext
-
 
 class SprintRoutes(sprintService: SprintService)
   (implicit mat: Materializer, ec: ExecutionContext) {

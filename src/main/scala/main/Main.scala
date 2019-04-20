@@ -2,6 +2,7 @@ package main
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.headers._
 import akka.http.scaladsl.server.Directives._
 import akka.stream.{ActorMaterializer, Materializer}
 import com.softwaremill.macwire._
@@ -16,7 +17,6 @@ import sprint.storages.SprintStorage
 import user.routes.UserRoutes
 import user.services.UserService
 import user.storages.UserStorage
-
 import scala.concurrent.ExecutionContext
 
 trait MainContext {
@@ -41,7 +41,13 @@ trait MainContext {
   lazy val sprintService: SprintService = wire[SprintService]
   lazy val sprintRoutes: SprintRoutes = wire[SprintRoutes]
 
-  lazy val routes = projectRoutes.projectRoutes ~ userRoutes.userRoutes
+  lazy val headers = respondWithHeaders(List(
+    `Access-Control-Allow-Origin`.*,
+    `Access-Control-Allow-Credentials`(true),
+    `Access-Control-Allow-Headers`("Authorization",
+      "Content-Type", "X-Requested-With")))
+
+  lazy val routes = headers { projectRoutes.projectRoutes ~ userRoutes.userRoutes }
 }
 
 object Main extends App with MainContext {
