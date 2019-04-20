@@ -1,13 +1,10 @@
 package sprint.domain
 
 import java.time.LocalDate
-
 import project.domain.ProjectId
-
 import scala.util.Random
 
 object SprintId {
-
   // TODO: generate sprintId based on current project sprints count
   def generate: SprintId = SprintId(Random.nextInt().abs)
 }
@@ -26,7 +23,7 @@ case class Sprint(
 case class SprintUpdate(
   closingStatus: Option[SprintClosingStatus]
 ) {
-  def update(sprint: Sprint): Sprint =
+  def toSprint(sprint: Sprint): Sprint =
     Sprint(
       sprint.projectId,
       sprint.sprintId,

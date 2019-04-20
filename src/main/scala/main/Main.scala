@@ -20,6 +20,9 @@ import sprint.storages.SprintStorage
 import user.routes.UserRoutes
 import user.services.UserService
 import user.storages.UserStorage
+import week.routes.WeekRoute
+import week.services.WeekService
+import week.storages.WeekStorage
 
 import scala.concurrent.ExecutionContext
 
@@ -45,14 +48,17 @@ trait MainContext {
   lazy val sessionStorage: SessionStorage = wire[SessionStorage]
   lazy val sessionService: SessionService = wire[SessionService]
   lazy val sessionRoutes: SessionRoutes = wire[SessionRoutes]
+  lazy val weekStorage: WeekStorage = wire[WeekStorage]
+  lazy val weekService: WeekService = wire[WeekService]
+  lazy val weekRoutes: WeekRoute = wire[WeekRoute]
 
-  lazy val mheaders = respondWithHeaders(List(
+  lazy val mHeaders = respondWithHeaders(List(
     `Access-Control-Allow-Origin`.*,
     `Access-Control-Allow-Credentials`(true),
     `Access-Control-Allow-Headers`("Authorization",
       "Content-Type", "X-Requested-With")))
 
-  lazy val routes = mheaders { projectRoutes.projectRoutes ~ userRoutes.userRoutes }
+  lazy val routes = mHeaders { projectRoutes.projectRoutes ~ userRoutes.userRoutes }
 }
 
 object Main extends App with MainContext {

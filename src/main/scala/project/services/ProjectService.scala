@@ -8,7 +8,7 @@ import cats.data.OptionT
 import scala.concurrent.{ExecutionContext, Future}
 
 class ProjectService(db: Database, projectStorage: ProjectStorage)
-                    (implicit ec: ExecutionContext){
+                    (implicit ec: ExecutionContext) {
 
   def getProjects: Future[Seq[Project]] =
     db.run(projectStorage.getAllProjects)

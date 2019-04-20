@@ -23,7 +23,7 @@ class SprintService(db: Database, sprintStorage: SprintStorage)
   def updateSprint(projectId: ProjectId, sprintId: SprintId, sprintUpdate: SprintUpdate): Future[Option[Int]] = {
     val query = for {
       sprint <- OptionT(sprintStorage.getSprint(projectId, sprintId))
-      updatedSprint = sprintUpdate.update(sprint)
+      updatedSprint = sprintUpdate.toSprint(sprint)
       result <- OptionT.liftF(sprintStorage.updateSprint(updatedSprint))
     } yield result
 

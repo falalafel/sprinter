@@ -25,7 +25,7 @@ create table if not exists week
 	userid integer not null
 		constraint week_users_userid_fk
 			references "user",
-	day integer not null,
+	day varchar(3) not null,
 	hours integer not null,
 	constraint week_pk
 		primary key (userid, day)

@@ -9,9 +9,11 @@ import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import user.domain.{UserCreate, UserId, UserUpdate}
 import io.circe.syntax._
 import session.routes.SessionRoutes
+import week.routes.WeekRoute
+
 import scala.concurrent.ExecutionContext
 
-class UserRoutes(userService: UserService, sessionRoutes: SessionRoutes)
+class UserRoutes(userService: UserService, sessionRoutes: SessionRoutes, weekRoute: WeekRoute)
                 (implicit mat: Materializer, ec: ExecutionContext) {
 
   def userRoutes: Route = pathPrefix("user") {
@@ -48,6 +50,8 @@ class UserRoutes(userService: UserService, sessionRoutes: SessionRoutes)
             }
         } ~ pathPrefix("session") {
           sessionRoutes.sessionRoutes(id)
+        } ~ pathPrefix("week") {
+          weekRoute.weekRoutes(id)
         }
       }
   }

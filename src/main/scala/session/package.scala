@@ -1,5 +1,4 @@
 import java.sql.Timestamp
-
 import io.circe.Decoder.Result
 import io.circe.{Decoder, Encoder, HCursor, Json}
 import io.circe.generic.extras.semiauto._

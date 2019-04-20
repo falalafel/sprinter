@@ -43,7 +43,6 @@ class UserSpec extends TemplateSpec with TestHelpers {
         status shouldBe StatusCodes.NoContent
       }
     }
-
   }
 
 }
