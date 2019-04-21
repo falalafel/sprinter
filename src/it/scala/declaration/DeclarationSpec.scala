@@ -20,7 +20,7 @@ class DeclarationSpec extends TemplateSpec with TestHelpers {
   val userCreateQuery = userService.createUser(userCreate.toUser)
   val userId = result(userCreateQuery)
 
-  val declarationCreateQuery = declarationService.createDeclaration(
+  val declarationCreateQuery = declarationService.insertOrUpdateDeclaration(
     declarationCreate.toDeclaration(projectId, sprintId1, userId))
 
   result(declarationCreateQuery)
@@ -38,10 +38,11 @@ class DeclarationSpec extends TemplateSpec with TestHelpers {
       }
     }
 
-    "post user's declaration for sprint" in {
-      Post(s"/project/${projectId.id}/sprint/${sprintId2.id}/declaration/${userId.id}").withEntity(ContentTypes.`application/json`, declarationCreate.asJson.toString) ~>
+    "put user's declaration for sprint" in {
+      Put(s"/project/${projectId.id}/sprint/${sprintId2.id}/declaration/${userId.id}")
+        .withEntity(ContentTypes.`application/json`, declarationCreate.asJson.toString) ~>
         Route.seal(routes) ~> check {
-        status shouldBe StatusCodes.Created
+        status shouldBe StatusCodes.NoContent
       }
     }
 

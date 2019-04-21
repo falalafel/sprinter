@@ -8,11 +8,10 @@ import declaration.storages.DeclarationStorage
 import project.domain.ProjectId
 import sprint.domain.SprintId
 import user.domain.UserId
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationService(db: Database, declarationStorage: DeclarationStorage)
-  (implicit ec: ExecutionContext) {
+                        (implicit ec: ExecutionContext) {
 
   def getDeclarationsForSprint(projectId: ProjectId, sprintId: SprintId): Future[Seq[Declaration]] =
     db.run(declarationStorage.getDeclarationsForSprint(projectId, sprintId))
@@ -20,8 +19,9 @@ class DeclarationService(db: Database, declarationStorage: DeclarationStorage)
   def getDeclaration(projectId: ProjectId, sprintId: SprintId, userId: UserId): Future[Option[Declaration]] =
     db.run(declarationStorage.getDeclaration(projectId, sprintId, userId))
 
-  def createDeclaration(declaration: Declaration): Future[(ProjectId, SprintId, UserId)] =
-    db.run(declarationStorage.insertDeclaration(declaration).map(_ => (declaration.projectId, declaration.sprintId, declaration.userId)))
+  def insertOrUpdateDeclaration(declaration: Declaration): Future[(ProjectId, SprintId, UserId)] =
+    db.run(declarationStorage.insertOrUpdateDeclaration(declaration)
+      .map(_ => (declaration.projectId, declaration.sprintId, declaration.userId)))
 
   def deleteDeclaration(projectId: ProjectId, sprintId: SprintId, userId: UserId): Future[Option[Int]] = {
     val query = for {

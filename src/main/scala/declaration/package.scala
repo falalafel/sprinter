@@ -19,4 +19,5 @@ package object declaration {
 
   implicit val declarationCommentDecoder: Decoder[DeclarationComment] = deriveUnwrappedDecoder
   implicit val declarationCommentEncoder: Encoder[DeclarationComment] = deriveUnwrappedEncoder
+
 }

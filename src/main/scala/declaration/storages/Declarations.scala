@@ -6,11 +6,11 @@ import slick.jdbc.PostgresProfile.api._
 import slick.lifted.ProvenShape
 import sprint.domain.SprintId
 import user.domain.UserId
+import user.storages.Users
+import project.storages.Projects
+import sprint.storages.Sprints
 
 object Declarations {
-  implicit val projectIdImpl: BaseColumnType[ProjectId] = MappedColumnType.base(_.id, ProjectId.apply)
-  implicit val sprintIdImpl: BaseColumnType[SprintId] = MappedColumnType.base(_.id, SprintId.apply)
-  implicit val userIdImpl: BaseColumnType[UserId] = MappedColumnType.base(_.id, UserId.apply)
   implicit val hoursAvailableImpl: BaseColumnType[HoursAvailable] = MappedColumnType.base(_.value, HoursAvailable)
   implicit val WorkNeededImpl: BaseColumnType[WorkNeeded] = MappedColumnType.base(_.value, WorkNeeded)
   implicit val DeclarationCommentImpl: BaseColumnType[DeclarationComment] = MappedColumnType.base(_.comment, DeclarationComment)
@@ -18,6 +18,9 @@ object Declarations {
 
 class Declarations(tag: Tag) extends Table[Declaration](tag, "declaration"){
   import Declarations._
+  import Users._
+  import Projects._
+  import Sprints._
 
   def projectId: Rep[ProjectId] = column[ProjectId]("projectid")
 
@@ -30,6 +33,8 @@ class Declarations(tag: Tag) extends Table[Declaration](tag, "declaration"){
   def workNeeded: Rep[WorkNeeded] = column[WorkNeeded]("workneeded")
 
   def comment: Rep[DeclarationComment] = column[DeclarationComment]("comment")
+
+  def pk = primaryKey("declaration_pk", (sprintId, projectId, userId))
 
   def * : ProvenShape[Declaration] = (projectId, sprintId, userId, hoursAvailable, workNeeded, comment) <> (Declaration.tupled, Declaration.unapply)
 }

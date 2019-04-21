@@ -11,7 +11,6 @@ import declaration.domain.DeclarationCreate
 import declaration.services.DeclarationService
 import io.circe.syntax._
 import user.domain.UserId
-
 import scala.concurrent.ExecutionContext
 
 class DeclarationRoutes(declarationService: DeclarationService)
@@ -26,9 +25,9 @@ class DeclarationRoutes(declarationService: DeclarationService)
           case Some(declaration) => StatusCodes.OK -> declaration.asJson
           case None => StatusCodes.NotFound -> (projectId, sprintId, userId).asJson
         })
-      } ~ post {
+      } ~ put {
         entity(as[DeclarationCreate]) { declarationCreate =>
-          complete(StatusCodes.Created, declarationService.createDeclaration(
+          complete(StatusCodes.NoContent, declarationService.insertOrUpdateDeclaration(
             declarationCreate.toDeclaration(projectId, sprintId, userId)))
         }
       } ~ delete {
