@@ -1,12 +1,14 @@
 package sprint.storages
 
 import project.domain.ProjectId
+import project.storages.Projects
 import slick.dbio.DBIO
 import slick.jdbc.PostgresProfile.api._
 import sprint.domain.{Sprint, SprintId}
 
 class SprintStorage {
   import Sprints._
+  import Projects._
 
   def getSprintsByProjectId(projectId: ProjectId): DBIO[Seq[Sprint]] =
     sprints.filter(_.projectId === projectId).result
