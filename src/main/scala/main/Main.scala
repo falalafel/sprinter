@@ -13,6 +13,9 @@ import declaration.storages.DeclarationStorage
 import project.routes.ProjectRoute
 import project.services.ProjectService
 import project.storages.ProjectStorage
+import projectmembership.routes.ProjectMembershipRoutes
+import projectmembership.services.ProjectMembershipService
+import projectmembership.storages.ProjectMembershipStorage
 import session.routes.SessionRoutes
 import session.services.SessionService
 import session.storages.SessionStorage
@@ -57,6 +60,9 @@ trait MainContext {
   lazy val declarationStorage: DeclarationStorage = wire[DeclarationStorage]
   lazy val declarationService: DeclarationService = wire[DeclarationService]
   lazy val declarationRoutes: DeclarationRoutes = wire[DeclarationRoutes]
+  lazy val projectMembershipStorage: ProjectMembershipStorage = wire[ProjectMembershipStorage]
+  lazy val projectMembershipService: ProjectMembershipService = wire[ProjectMembershipService]
+  lazy val projectMembershipRoutes: ProjectMembershipRoutes = wire[ProjectMembershipRoutes]
 
   lazy val mHeaders = respondWithHeaders(List(
     `Access-Control-Allow-Origin`.*,
