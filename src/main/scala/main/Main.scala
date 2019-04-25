@@ -73,7 +73,7 @@ object Main extends App with MainContext {
   implicit val executor: ExecutionContext = system.dispatcher
   implicit val materializer: Materializer = ActorMaterializer()
 
-  val interface = "localhost"
-  val port = 8080
+  val interface = "0.0.0.0"
+  val port = 9000
   Http().bindAndHandle(routes, interface, port)
 }
