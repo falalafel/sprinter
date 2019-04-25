@@ -74,6 +74,6 @@ object Main extends App with MainContext {
   implicit val materializer: Materializer = ActorMaterializer()
 
   val interface = "0.0.0.0"
-  val port = 9000
+  val port = Properties.envOrElse("PORT", "9000").toInt
   Http().bindAndHandle(routes, interface, port)
 }
