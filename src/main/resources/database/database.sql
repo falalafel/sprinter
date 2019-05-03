@@ -1,5 +1,3 @@
-create schema public;
-
 create table if not exists "user"
 (
 	userid integer not null
