@@ -2,7 +2,7 @@
 
 Backend scala app
 
-[![Build Status](https://travis-ci.org/falalafel/sprinter.svg?branch=master)](https://travis-ci.org/falalafel/sprinter)
+[![Build Status](https://travis-ci.com/falalafel/sprinter.svg?branch=master)](https://travis-ci.com/falalafel/sprinter)
 
 ## Usage
 
