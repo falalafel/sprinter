@@ -1,0 +1,11 @@
+language: scala
+
+scala:
+  - 2.12.8
+
+services: postgresql
+
+before_script:
+  - psql -c 'create database postgres;' -U postgres
+  - psql -U postgres -d postgres -a -f ./src/main/resources/database/database.sql
+
