@@ -1,5 +1,6 @@
 package main
 
+import scala.util.Properties
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.headers._
@@ -44,7 +45,7 @@ trait MainContext {
 
   lazy val projectStorage: ProjectStorage = wire[ProjectStorage]
   lazy val projectService: ProjectService = wire[ProjectService]
-  lazy val projectRoutes: ProjectRoute    = wire[ProjectRoute]
+  lazy val projectRoutes: ProjectRoute = wire[ProjectRoute]
   lazy val userStorage: UserStorage = wire[UserStorage]
   lazy val userService: UserService = wire[UserService]
   lazy val userRoutes: UserRoutes = wire[UserRoutes]
@@ -70,7 +71,9 @@ trait MainContext {
     `Access-Control-Allow-Headers`("Authorization",
       "Content-Type", "X-Requested-With")))
 
-  lazy val routes = mHeaders { projectRoutes.projectRoutes ~ userRoutes.userRoutes }
+  lazy val routes = mHeaders {
+    projectRoutes.projectRoutes ~ userRoutes.userRoutes
+  }
 }
 
 object Main extends App with MainContext {
@@ -79,7 +82,10 @@ object Main extends App with MainContext {
   implicit val executor: ExecutionContext = system.dispatcher
   implicit val materializer: Materializer = ActorMaterializer()
 
-  val interface = "localhost"
-  val port = 8080
+  val interface = config.getString("http.interface")
+  val port = Properties.envOrNone("PORT") match {
+    case Some(portEnv) => portEnv.toInt
+    case None => config.getInt("http.port")
+  }
   Http().bindAndHandle(routes, interface, port)
 }

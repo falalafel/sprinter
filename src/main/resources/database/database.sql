@@ -1,9 +1,3 @@
-create schema public;
-
-comment on schema public is 'standard public schema';
-
-alter schema public owner to postgres;
-
 create table if not exists "user"
 (
 	userid integer not null
@@ -14,8 +8,6 @@ create table if not exists "user"
 	password varchar(255),
 	role integer not null
 );
-
-alter table "user" owner to postgres;
 
 create unique index if not exists users_userid_uindex
 	on "user" (userid);
@@ -31,8 +23,6 @@ create table if not exists week
 		primary key (userid, day)
 );
 
-alter table week owner to postgres;
-
 create table if not exists session
 (
 	sessionid integer not null
@@ -44,8 +34,6 @@ create table if not exists session
 	cookiehash varchar(255) not null,
 	timestamp timestamp not null
 );
-
-alter table session owner to postgres;
 
 create unique index if not exists session_sessionid_uindex
 	on session (sessionid);
@@ -60,8 +48,6 @@ create table if not exists project
 	duration integer not null,
 	closed boolean not null
 );
-
-alter table project owner to postgres;
 
 create unique index if not exists project_projectid_uindex
 	on project (projectid);
@@ -79,8 +65,6 @@ create table if not exists projectmembership
 		primary key (projectid, userid)
 );
 
-alter table projectmembership owner to postgres;
-
 create table if not exists sprint
 (
 	sprintid integer not null,
@@ -93,8 +77,6 @@ create table if not exists sprint
   constraint sprint_pk
 			primary key (sprintid, projectid)
 );
-
-alter table sprint owner to postgres;
 
 create unique index if not exists sprint_sprintid_uindex
 	on sprint (sprintid);
@@ -116,6 +98,3 @@ create table if not exists declaration
 		foreign key (projectid, sprintid)
 			references sprint(projectid, sprintid)
 );
-
-alter table declaration owner to postgres;
-
