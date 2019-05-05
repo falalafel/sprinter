@@ -30,7 +30,6 @@ import user.storages.UserStorage
 import week.routes.WeekRoute
 import week.services.WeekService
 import week.storages.WeekStorage
-
 import scala.concurrent.ExecutionContext
 
 trait MainContext {

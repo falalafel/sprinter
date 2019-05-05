@@ -10,8 +10,6 @@ import projectmembership.domain.ProjectMembershipCreate
 import projectmembership.services.ProjectMembershipService
 import project.domain.ProjectId
 import user.domain.UserId
-
-
 import scala.concurrent.ExecutionContext
 
 class ProjectMembershipRoutes(projectMembershipService: ProjectMembershipService)

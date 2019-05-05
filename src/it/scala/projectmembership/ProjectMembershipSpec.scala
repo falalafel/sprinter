@@ -21,19 +21,19 @@ class ProjectMembershipSpec extends TemplateSpec with TestHelpers {
 
   "ProjectMembershipSpec" should {
     "get list of projectmemberships for project" in {
-      Get(s"/project/${projectId.id}/projectmembership") ~> Route.seal(routes) ~> check {
+      Get(s"/project/${projectId.id}/membership") ~> Route.seal(routes) ~> check {
         status shouldBe StatusCodes.OK
       }
     }
 
     "get specified user's projectmembership for project" in {
-      Get(s"/project/${projectId.id}/projectmembership/${userId.id}") ~> Route.seal(routes) ~> check {
+      Get(s"/project/${projectId.id}/membership/${userId.id}") ~> Route.seal(routes) ~> check {
         status shouldBe StatusCodes.OK
       }
     }
 
     "put user's projectmemberships for project" in {
-      Put(s"/project/${projectId.id}/projectmembership/${userId.id}")
+      Put(s"/project/${projectId.id}/membership/${userId.id}")
         .withEntity(ContentTypes.`application/json`, projectMembershipCreate.asJson.toString) ~>
         Route.seal(routes) ~> check {
         status shouldBe StatusCodes.NoContent
@@ -41,7 +41,7 @@ class ProjectMembershipSpec extends TemplateSpec with TestHelpers {
     }
 
     "delete projectmembership" in {
-      Delete(s"/project/${projectId.id}/projectmembership/${userId.id}") ~> Route.seal(routes) ~> check {
+      Delete(s"/project/${projectId.id}/membership/${userId.id}") ~> Route.seal(routes) ~> check {
         status shouldBe StatusCodes.NoContent
       }
     }
