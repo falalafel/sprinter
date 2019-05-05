@@ -8,11 +8,12 @@ import project.services.ProjectService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import project.domain.{ProjectCreate, ProjectId, ProjectUpdate}
 import io.circe.syntax._
+import projectmembership.routes.ProjectMembershipRoutes
 import sprint.routes.SprintRoutes
-
 import scala.concurrent.ExecutionContext
 
-class ProjectRoute(projectService: ProjectService, sprintRoutes: SprintRoutes)
+class ProjectRoute(projectService: ProjectService, sprintRoutes: SprintRoutes,
+                   projectMembershipRoutes: ProjectMembershipRoutes)
                   (implicit mat: Materializer, ec: ExecutionContext) {
 
   def projectRoutes: Route = pathPrefix("project") {
@@ -49,6 +50,8 @@ class ProjectRoute(projectService: ProjectService, sprintRoutes: SprintRoutes)
             }
         } ~ pathPrefix("sprint") {
           sprintRoutes.sprintRoutes(id)
+        } ~ pathPrefix("membership") {
+          projectMembershipRoutes.projectMembershipRoutes(id)
         }
       }
   }
