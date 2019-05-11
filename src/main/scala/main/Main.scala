@@ -3,6 +3,8 @@ package main
 import scala.util.Properties
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.HttpMethods._
+import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.model.headers._
 import akka.http.scaladsl.server.Directives._
 import akka.stream.{ActorMaterializer, Materializer}
@@ -66,11 +68,15 @@ trait MainContext {
 
   lazy val mHeaders = respondWithHeaders(List(
     `Access-Control-Allow-Origin`.*,
+    `Access-Control-Allow-Methods`(POST, GET, PUT, DELETE, OPTIONS),
     `Access-Control-Allow-Credentials`(true),
     `Access-Control-Allow-Headers`("Authorization",
       "Content-Type", "X-Requested-With")))
 
   lazy val routes = mHeaders {
+    options {
+      complete(StatusCodes.OK)
+    } ~
     projectRoutes.projectRoutes ~ userRoutes.userRoutes
   }
 }
