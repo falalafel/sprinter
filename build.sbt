@@ -46,3 +46,8 @@ configs(IntegrationTest)
 Seq(Defaults.itSettings:  _*)
 Revolver.settings
 enablePlugins(JavaAppPackaging)
+
+enablePlugins(FlywayPlugin)
+flywayUrl := sys.env.getOrElse("SPRINTER_DB_URL", "")
+flywayUser := sys.env.getOrElse("SPRINTER_DB_USER", "")
+flywayPassword := sys.env.getOrElse("SPRINTER_DB_PASS", "")

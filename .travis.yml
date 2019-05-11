@@ -6,7 +6,8 @@ scala:
 services: postgresql
 
 before_script:
-  - psql -U postgres -d postgres -a -f ./src/main/resources/database/database.sql
+  - sbt flywayClean
+  - sbt flywayMigrate
 
 jobs:
   include:
