@@ -7,8 +7,9 @@ Backend scala app
 ## Usage
 
 - set env vars according to `application.conf`
-- run `init_script.sql` in db
-- run `compile` and `reStart` in sbt shell
+- start `sbt` server
+- run migrations vs `flywayClean` and `flywayMigrate`
+- run `reStart` to start server
 - go to `localhost:8080`
 
 ## Overview
