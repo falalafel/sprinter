@@ -68,7 +68,7 @@ trait MainContext {
 
   lazy val mHeaders = respondWithHeaders(List(
     `Access-Control-Allow-Origin`.*,
-    `Access-Control-Allow-Methods`(POST, GET, PUT, DELETE, OPTIONS),
+    `Access-Control-Allow-Methods`(POST, GET, PUT, PATCH, DELETE, OPTIONS),
     `Access-Control-Allow-Credentials`(true),
     `Access-Control-Allow-Headers`("Authorization",
       "Content-Type", "X-Requested-With")))
