@@ -22,4 +22,6 @@ package object project {
   implicit val projectNameEncoder: Encoder[ProjectName] = deriveUnwrappedEncoder
   implicit val projectClosingStatusDecoder: Decoder[ProjectClosingStatus] = deriveUnwrappedDecoder
   implicit val projectClosingStatusEncoder: Encoder[ProjectClosingStatus] = deriveUnwrappedEncoder
+  implicit val projectStartingFactorDecoder: Decoder[ProjectStartingFactor] = deriveUnwrappedDecoder
+  implicit val projectStartingFactorEncoder: Encoder[ProjectStartingFactor] = deriveUnwrappedEncoder
 }
