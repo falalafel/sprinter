@@ -11,7 +11,8 @@ object ProjectMembershipHelpers {
   def projectCreate = ProjectCreate(
     ProjectName("[projectmembership test] project"),
     ProjectStartDate(LocalDate.now()),
-    SprintDuration(20)
+    SprintDuration(20),
+    ProjectStartingFactor(2.5)
   )
 
   def userCreate = UserCreate(

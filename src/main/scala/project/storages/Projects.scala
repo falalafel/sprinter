@@ -1,6 +1,6 @@
 package project.storages
 
-import project.domain.{Project, ProjectClosingStatus, ProjectId, ProjectName, ProjectStartDate, SprintDuration}
+import project.domain._
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.ProvenShape
 
@@ -10,9 +10,11 @@ object Projects {
   implicit val projectStartDateImpl: BaseColumnType[ProjectStartDate] = MappedColumnType.base(_.date, ProjectStartDate)
   implicit val sprintDurationImpl: BaseColumnType[SprintDuration] = MappedColumnType.base(_.days, SprintDuration)
   implicit val projectClosingStatusImpl: BaseColumnType[ProjectClosingStatus] = MappedColumnType.base(_.status, ProjectClosingStatus)
+  implicit val projectStartingFactorImpl: BaseColumnType[ProjectStartingFactor] = MappedColumnType.base(_.factor, ProjectStartingFactor)
 }
 
 class Projects(tag: Tag) extends Table[Project](tag, "project") {
+
   import Projects._
 
   def id: Rep[ProjectId] = column[ProjectId]("projectid", O.PrimaryKey)
@@ -25,5 +27,7 @@ class Projects(tag: Tag) extends Table[Project](tag, "project") {
 
   def closingStatus: Rep[ProjectClosingStatus] = column[ProjectClosingStatus]("closed")
 
-  def * : ProvenShape[Project] = (id, name, startDate, duration, closingStatus) <> (Project.tupled, Project.unapply)
+  def startingFactor: Rep[ProjectStartingFactor] = column[ProjectStartingFactor]("starting_factor")
+
+  def * : ProvenShape[Project] = (id, name, startDate, duration, closingStatus, startingFactor) <> (Project.tupled, Project.unapply)
 }

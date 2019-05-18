@@ -9,36 +9,58 @@ object SprintId {
   def generate: SprintId = SprintId(Random.nextInt().abs)
 }
 
+object SprintFactor {
+  // TODO: implement calculateFactorForSprint
+  def calculateFactorForSprint: SprintFactor = SprintFactor(2.5)
+}
+
 case class SprintId(id: Int) extends AnyVal
 case class SprintStartDate(date: LocalDate) extends AnyVal
+case class SprintEndDate(date: LocalDate) extends AnyVal
 case class SprintClosingStatus(status: Boolean) extends AnyVal
+case class SprintFactor(factor: Double) extends AnyVal
+case class SprintOriginalEstimatedHours(originalEstimatedHours: Int) extends AnyVal
+case class SprintEndPlannedHours(endPlannedHours: Int) extends AnyVal
+case class SprintBurnedHours(burnedHours: Int) extends AnyVal
 
 case class Sprint(
   projectId: ProjectId,
   sprintId: SprintId,
   startDate: SprintStartDate,
-  closingStatus: SprintClosingStatus
+  endDate: SprintEndDate,
+  closingStatus: SprintClosingStatus,
+  factor: SprintFactor,
+  originalEstimatedHours: Option[SprintOriginalEstimatedHours] = None,
+  endPlannedHours: Option[SprintEndPlannedHours] = None,
+  burnedHours: Option[SprintBurnedHours] = None
 )
 
-case class SprintUpdate(
-  closingStatus: Option[SprintClosingStatus]
-) {
+case class SprintUpdate(closingStatus: Option[SprintClosingStatus],
+                        originalEstimatedHours: Option[SprintOriginalEstimatedHours],
+                        endPlannedHours: Option[SprintEndPlannedHours],
+                        burnedHours: Option[SprintBurnedHours]) {
   def toSprint(sprint: Sprint): Sprint =
     Sprint(
       sprint.projectId,
       sprint.sprintId,
       sprint.startDate,
-      closingStatus.getOrElse(sprint.closingStatus)
+      sprint.endDate,
+      closingStatus.getOrElse(sprint.closingStatus),
+      sprint.factor,
+      originalEstimatedHours,
+      endPlannedHours,
+      burnedHours
     )
 }
 
-case class SprintCreate(
-  startDate: SprintStartDate
-) {
+case class SprintCreate(startDate: SprintStartDate,
+                        endDate: SprintEndDate) {
   def toSprint(projectId: ProjectId) = Sprint(
     projectId,
     SprintId.generate,
     startDate,
-    SprintClosingStatus(false)
+    endDate,
+    SprintClosingStatus(false),
+    SprintFactor.calculateFactorForSprint
   )
 }
