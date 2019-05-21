@@ -16,7 +16,8 @@ object DeclarationSpecHelpers {
     ProjectStartingFactor(2.5)
   )
 
-  def sprintCreate = SprintCreate(SprintStartDate(LocalDate.now()), SprintEndDate(LocalDate.of(2077, 12, 30)))
+  def sprintCreate = SprintCreate(SprintStartDate(LocalDate.now()),
+    SprintEndDate(LocalDate.of(2077, 12, 30)))
 
   def userCreate = UserCreate(
     FullName("[declaration test] John Snow"),
