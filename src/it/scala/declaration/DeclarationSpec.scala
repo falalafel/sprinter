@@ -5,17 +5,15 @@ import akka.http.scaladsl.server.Route
 import io.circe.syntax._
 import utils.{TemplateSpec, TestHelpers}
 import DeclarationSpecHelpers._
+import sprint.SprintSpecHelpers.sprintUpdate
 
 class DeclarationSpec extends TemplateSpec with TestHelpers {
 
   val projectCreateQuery = projectService.createProject(projectCreate.toProject)
   val projectId = result(projectCreateQuery)
 
-  val sprintCreateQuery1 = sprintService.createSprint(sprintCreate.toSprint(projectId))
-  val (_, sprintId1) = result(sprintCreateQuery1)
-
-  val sprintCreateQuery2 = sprintService.createSprint(sprintCreate.toSprint(projectId))
-  val (_, sprintId2) = result(sprintCreateQuery2)
+  val sprintCreateQuery1 = sprintService.createSprint(sprintCreate, projectId)
+  val (_, sprintId1) = result(sprintCreateQuery1).get
 
   val userCreateQuery = userService.createUser(userCreate.toUser)
   val userId = result(userCreateQuery)
@@ -24,6 +22,12 @@ class DeclarationSpec extends TemplateSpec with TestHelpers {
     declarationCreate.toDeclaration(projectId, sprintId1, userId))
 
   result(declarationCreateQuery)
+
+  val sprintCloseQuery1 = sprintService.updateSprint(projectId, sprintId1, sprintUpdate)
+  result(sprintCloseQuery1)
+
+  val sprintCreateQuery2 = sprintService.createSprint(sprintCreate, projectId)
+  val (_, sprintId2) = result(sprintCreateQuery2).get
 
   "DeclarationSpec" should {
     "get list of declarations for sprint" in {
