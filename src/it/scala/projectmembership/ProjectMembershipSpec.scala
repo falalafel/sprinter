@@ -1,5 +1,6 @@
 package projectmembership
 
+import akka.http.scaladsl.model.headers.Cookie
 import akka.http.scaladsl.model.{ContentTypes, StatusCodes}
 import akka.http.scaladsl.server.Route
 import io.circe.syntax._
@@ -21,13 +22,13 @@ class ProjectMembershipSpec extends TemplateSpec with TestHelpers {
 
   "ProjectMembershipSpec" should {
     "get list of projectmemberships for project" in {
-      Get(s"/project/${projectId.id}/membership") ~> Route.seal(routes) ~> check {
+      Get(s"/project/${projectId.id}/membership") ~> Cookie("sprinter-client" -> sessionId) ~> Route.seal(routes) ~> check {
         status shouldBe StatusCodes.OK
       }
     }
 
     "get specified user's projectmembership for project" in {
-      Get(s"/project/${projectId.id}/membership/${userId.id}") ~> Route.seal(routes) ~> check {
+      Get(s"/project/${projectId.id}/membership/${userId.id}") ~> Cookie("sprinter-client" -> sessionId) ~> Route.seal(routes) ~> check {
         status shouldBe StatusCodes.OK
       }
     }
@@ -35,13 +36,15 @@ class ProjectMembershipSpec extends TemplateSpec with TestHelpers {
     "put user's projectmemberships for project" in {
       Put(s"/project/${projectId.id}/membership/${userId.id}")
         .withEntity(ContentTypes.`application/json`, projectMembershipCreate.asJson.toString) ~>
+        Cookie("sprinter-client" -> sessionId) ~>
         Route.seal(routes) ~> check {
         status shouldBe StatusCodes.NoContent
       }
     }
 
     "delete projectmembership" in {
-      Delete(s"/project/${projectId.id}/membership/${userId.id}") ~> Route.seal(routes) ~> check {
+      Delete(s"/project/${projectId.id}/membership/${userId.id}") ~>
+        Cookie("sprinter-client" -> sessionId) ~> Route.seal(routes) ~> check {
         status shouldBe StatusCodes.NoContent
       }
     }

@@ -5,6 +5,7 @@ import akka.http.scaladsl.server.Route
 import io.circe.syntax._
 import utils.{TemplateSpec, TestHelpers}
 import SprintSpecHelpers._
+import akka.http.scaladsl.model.headers.Cookie
 import sprint.domain.{SprintFactor, SprintId}
 
 class SprintSpec extends TemplateSpec with TestHelpers {
@@ -20,33 +21,38 @@ class SprintSpec extends TemplateSpec with TestHelpers {
 
   "SprintSpec" should {
     "get project's sprint list" in {
-      Get(s"/project/${projectId.id}/sprint") ~> Route.seal(routes) ~> check {
+      Get(s"/project/${projectId.id}/sprint") ~>
+        Cookie("sprinter-client" -> sessionId) ~>Route.seal(routes) ~> check {
         status shouldBe StatusCodes.OK
       }
     }
 
     "get sprint from project" in {
-      Get(s"/project/${projectId.id}/sprint/${sprintId.id}") ~> Route.seal(routes) ~> check {
+      Get(s"/project/${projectId.id}/sprint/${sprintId.id}") ~>
+        Cookie("sprinter-client" -> sessionId) ~>Route.seal(routes) ~> check {
         status shouldBe StatusCodes.OK
       }
     }
 
     "post sprint to project" in {
       Post(s"/project/${projectId.id}/sprint").withEntity(ContentTypes.`application/json`, sprintCreateMock.asJson.toString) ~>
+        Cookie("sprinter-client" -> sessionId) ~>
         Route.seal(routes) ~> check {
-        status shouldBe StatusCodes.Created
+          status shouldBe StatusCodes.Created
       }
     }
 
     "update sprint" in {
       Patch(s"/project/${projectId.id}/sprint/${sprintId.id}").withEntity(ContentTypes.`application/json`, sprintUpdateMock.asJson.toString()) ~>
-        Route.seal(routes) ~> check {
+        Cookie("sprinter-client" -> sessionId) ~>
+      Route.seal(routes) ~> check {
         status shouldBe StatusCodes.NoContent
       }
     }
 
     "delete sprint" in {
-      Delete(s"/project/${projectId.id}/sprint/${sprintId.id}") ~> Route.seal(routes) ~> check {
+      Delete(s"/project/${projectId.id}/sprint/${sprintId.id}") ~>
+        Cookie("sprinter-client" -> sessionId) ~> Route.seal(routes) ~> check {
         status shouldBe StatusCodes.NoContent
       }
     }

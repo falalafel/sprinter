@@ -5,6 +5,7 @@ import akka.http.scaladsl.server.Route
 import utils.{TemplateSpec, TestHelpers}
 import io.circe.syntax._
 import UserSpecHelpers._
+import akka.http.scaladsl.model.headers.Cookie
 
 class UserSpec extends TemplateSpec with TestHelpers {
 
@@ -19,13 +20,14 @@ class UserSpec extends TemplateSpec with TestHelpers {
 
   "UserSpec" should {
     "get user list" in {
-      Get("/user") ~> Route.seal(routes) ~> check {
+      Get("/user") ~> Cookie("sprinter-client" -> sessionId) ~> Route.seal(routes) ~> check {
         status shouldBe StatusCodes.OK
       }
     }
 
     "post user" in {
       Post("/user").withEntity(ContentTypes.`application/json`, userMock.asJson.toString) ~>
+        Cookie("sprinter-client" -> sessionId) ~>
         Route.seal(routes) ~> check {
         status shouldBe StatusCodes.Created
       }
@@ -33,13 +35,16 @@ class UserSpec extends TemplateSpec with TestHelpers {
 
     "update user" in {
       Patch(s"/user/${idUpdate.id}").withEntity(ContentTypes.`application/json`, userMock.asJson.toString()) ~>
+        Cookie("sprinter-client" -> sessionId) ~>
         Route.seal(routes) ~> check {
         status shouldBe StatusCodes.NoContent
       }
     }
 
     "delete user" in {
-      Delete(s"/user/${idDelete.id}") ~> Route.seal(routes) ~> check {
+      Delete(s"/user/${idDelete.id}") ~>
+        Cookie("sprinter-client" -> sessionId) ~>
+        Route.seal(routes) ~> check {
         status shouldBe StatusCodes.NoContent
       }
     }

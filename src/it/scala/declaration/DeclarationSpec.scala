@@ -5,6 +5,7 @@ import akka.http.scaladsl.server.Route
 import io.circe.syntax._
 import utils.{TemplateSpec, TestHelpers}
 import DeclarationSpecHelpers._
+import akka.http.scaladsl.model.headers.Cookie
 import sprint.SprintSpecHelpers.sprintUpdate
 
 class DeclarationSpec extends TemplateSpec with TestHelpers {
@@ -31,27 +32,30 @@ class DeclarationSpec extends TemplateSpec with TestHelpers {
 
   "DeclarationSpec" should {
     "get list of declarations for sprint" in {
-      Get(s"/project/${projectId.id}/sprint/${sprintId1.id}/declaration") ~> Route.seal(routes) ~> check {
+      Get(s"/project/${projectId.id}/sprint/${sprintId1.id}/declaration") ~> Cookie("sprinter-client" -> sessionId) ~>
+        Route.seal(routes) ~> check {
         status shouldBe StatusCodes.OK
       }
     }
 
     "get specified user's declaration for sprint" in {
-      Get(s"/project/${projectId.id}/sprint/${sprintId1.id}/declaration/${userId.id}") ~> Route.seal(routes) ~> check {
+      Get(s"/project/${projectId.id}/sprint/${sprintId1.id}/declaration/${userId.id}") ~> Cookie("sprinter-client" -> sessionId) ~>
+        Route.seal(routes) ~> check {
         status shouldBe StatusCodes.OK
       }
     }
 
     "put user's declaration for sprint" in {
-      Put(s"/project/${projectId.id}/sprint/${sprintId2.id}/declaration/${userId.id}")
-        .withEntity(ContentTypes.`application/json`, declarationCreate.asJson.toString) ~>
+       Put(s"/project/${projectId.id}/sprint/${sprintId2.id}/declaration/${userId.id}")
+        .withEntity(ContentTypes.`application/json`, declarationCreate.asJson.toString) ~> Cookie("sprinter-client" -> sessionId) ~>
         Route.seal(routes) ~> check {
         status shouldBe StatusCodes.NoContent
       }
     }
 
     "delete declaration" in {
-      Delete(s"/project/${projectId.id}/sprint/${sprintId2.id}/declaration/${userId.id}") ~> Route.seal(routes) ~> check {
+      Delete(s"/project/${projectId.id}/sprint/${sprintId2.id}/declaration/${userId.id}") ~> Cookie("sprinter-client" -> sessionId) ~>
+        Route.seal(routes) ~> check {
         status shouldBe StatusCodes.NoContent
       }
     }
