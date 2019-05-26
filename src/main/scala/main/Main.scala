@@ -3,6 +3,7 @@ package main
 import scala.util.Properties
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.HttpMethods._
 import akka.http.scaladsl.model.headers._
 import akka.http.scaladsl.server.Directives._
 import akka.stream.{ActorMaterializer, Materializer}
@@ -34,6 +35,7 @@ import week.storages.WeekStorage
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import scala.concurrent.ExecutionContext
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
+import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
 
 trait MainContext {
 
@@ -69,12 +71,18 @@ trait MainContext {
   lazy val projectMembershipService: ProjectMembershipService = wire[ProjectMembershipService]
   lazy val projectMembershipRoutes: ProjectMembershipRoutes = wire[ProjectMembershipRoutes]
 
-  lazy val routes = cors() {
+  lazy val settings = CorsSettings.defaultSettings.withAllowedMethods(List(OPTIONS, GET, POST, PUT, PATCH, DELETE))
+
+  lazy val routes = cors(settings) {
     path("signin") {
       authenticateBasicAsync(realm = "secure", sessionService.logIn) { session =>
         setCookie(HttpCookie("sprinter-client", session.sessionId.sessionId.toString)) {
           complete(session.userId.id)
         }
+      }
+    } ~ path("signout") {
+      deleteCookie("sprinter-client") {
+        complete("Logout")
       }
     } ~ cookie("sprinter-client") { hash =>
       onSuccess(sessionService.authorize(SessionId(hash.value.toInt))) {
