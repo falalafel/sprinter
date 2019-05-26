@@ -4,7 +4,6 @@ import scala.util.Properties
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpMethods._
-import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.model.headers._
 import akka.http.scaladsl.server.Directives._
 import akka.stream.{ActorMaterializer, Materializer}
@@ -19,6 +18,7 @@ import project.storages.ProjectStorage
 import projectmembership.routes.ProjectMembershipRoutes
 import projectmembership.services.ProjectMembershipService
 import projectmembership.storages.ProjectMembershipStorage
+import session.domain.SessionId
 import session.routes.SessionRoutes
 import session.services.SessionService
 import session.storages.SessionStorage
@@ -32,12 +32,17 @@ import user.storages.UserStorage
 import week.routes.WeekRoute
 import week.services.WeekService
 import week.storages.WeekStorage
+import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import scala.concurrent.ExecutionContext
+import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
+import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
 
 trait MainContext {
 
   implicit val system: ActorSystem
+
   implicit def executor: ExecutionContext
+
   implicit val materializer: Materializer
 
   lazy val config = ConfigFactory.load()
@@ -66,18 +71,27 @@ trait MainContext {
   lazy val projectMembershipService: ProjectMembershipService = wire[ProjectMembershipService]
   lazy val projectMembershipRoutes: ProjectMembershipRoutes = wire[ProjectMembershipRoutes]
 
-  lazy val mHeaders = respondWithHeaders(List(
-    `Access-Control-Allow-Origin`.*,
-    `Access-Control-Allow-Methods`(POST, GET, PUT, PATCH, DELETE, OPTIONS),
-    `Access-Control-Allow-Credentials`(true),
-    `Access-Control-Allow-Headers`("Authorization",
-      "Content-Type", "X-Requested-With")))
+  lazy val settings = CorsSettings.defaultSettings.withAllowedMethods(List(OPTIONS, GET, POST, PUT, PATCH, DELETE))
 
-  lazy val routes = mHeaders {
-    options {
-      complete(StatusCodes.OK)
-    } ~
-    projectRoutes.projectRoutes ~ userRoutes.userRoutes
+  lazy val routes = cors(settings) {
+    path("signin") {
+      authenticateBasicAsync(realm = "secure", sessionService.logIn) { session =>
+        setCookie(HttpCookie("sprinter-client", session.sessionId.sessionId.toString)) {
+          complete(session.userId.id)
+        }
+      }
+    } ~ path("signout") {
+      deleteCookie("sprinter-client") {
+        complete("Logout")
+      }
+    } ~ cookie("sprinter-client") { hash =>
+      onSuccess(sessionService.authorize(SessionId(hash.value.toInt))) {
+        case Some(userId) =>
+          projectRoutes.projectRoutes ~ userRoutes.userRoutes
+        case None =>
+          complete("Not logged in")
+      }
+    }
   }
 }
 

@@ -10,6 +10,7 @@ libraryDependencies ++= {
   val slickVersion     = "3.3.0"
   val akkaVersion      = "2.5.20"
   val akkaHttpVersion  = "10.1.7"
+  val akkaHttpCors     = "0.4.0"
   val scalaTestVersion = "3.0.7"
   val circeVersion     = "0.11.1"
   val macwireVersion   = "2.3.1"
@@ -37,7 +38,8 @@ libraryDependencies ++= {
     "org.typelevel"            %% "cats-core"            % catsVersion,
     "com.rms.miu"              %% "slick-cats"           % catsSlickVersion,
     "com.typesafe.akka"        %% "akka-stream-testkit"  % akkaVersion,
-    "com.typesafe.akka"        %% "akka-http-testkit"    % akkaHttpVersion
+    "com.typesafe.akka"        %% "akka-http-testkit"    % akkaHttpVersion,
+    "ch.megard"                %% "akka-http-cors"       % akkaHttpCors
   )
 
 }

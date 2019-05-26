@@ -8,7 +8,7 @@ import slick.lifted.ProvenShape
 object Sessions {
   implicit val sessionIdImpl: BaseColumnType[SessionId] = MappedColumnType.base(_.sessionId, SessionId.apply)
   implicit val userIdImpl: BaseColumnType[UserId] = MappedColumnType.base(_.id, UserId.apply)
-  implicit val sessionCookieHashImpl: BaseColumnType[SessionCookieHash] = MappedColumnType.base(_.cookieHash, SessionCookieHash)
+  implicit val sessionCookieHashImpl: BaseColumnType[SessionCookieHash] = MappedColumnType.base(_.cookieHash, SessionCookieHash.apply)
   implicit val sessionTimeStampImpl: BaseColumnType[SessionTimeStamp] = MappedColumnType.base(_.timeStamp, SessionTimeStamp.apply)
 }
 
