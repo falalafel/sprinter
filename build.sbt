@@ -19,6 +19,7 @@ libraryDependencies ++= {
   val slf4jVersion     = "1.7.25"
   val catsVersion      = "1.5.0"
   val catsSlickVersion = "0.9.1"
+  val courierVersion   = "1.0.0"
 
   Seq(
     "com.typesafe.slick"       %% "slick"                % slickVersion,
@@ -39,7 +40,8 @@ libraryDependencies ++= {
     "com.rms.miu"              %% "slick-cats"           % catsSlickVersion,
     "com.typesafe.akka"        %% "akka-stream-testkit"  % akkaVersion,
     "com.typesafe.akka"        %% "akka-http-testkit"    % akkaHttpVersion,
-    "ch.megard"                %% "akka-http-cors"       % akkaHttpCors
+    "ch.megard"                %% "akka-http-cors"       % akkaHttpCors,
+    "com.github.daddykotex"    %% "courier"              % courierVersion
   )
 
 }

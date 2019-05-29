@@ -8,6 +8,8 @@ import project.domain.ProjectId
 import project.storages.ProjectStorage
 import sprint.domain.{Sprint, SprintCreate, SprintEffectiveFactor, SprintEffectiveFactorWithHistory, SprintId, SprintUpdate}
 import sprint.storages.SprintStorage
+import user.domain.User
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class SprintService(db: Database, sprintStorage: SprintStorage,
@@ -17,6 +19,9 @@ class SprintService(db: Database, sprintStorage: SprintStorage,
 
   def getSprintsFromProject(projectId: ProjectId): Future[Seq[Sprint]] =
     db.run(sprintStorage.getSprintsByProjectId(projectId))
+
+  def getOpenSprints: Future[Seq[Sprint]] =
+    db.run(sprintStorage.getOpenSprints)
 
   def getSprint(projectId: ProjectId, sprintId: SprintId): Future[Option[Sprint]] =
     db.run(sprintStorage.getSprint(projectId, sprintId))
@@ -86,4 +91,7 @@ class SprintService(db: Database, sprintStorage: SprintStorage,
 
     db.run(query.value)
   }
+
+  def getUsersWithNoDeclaration(sprintId: SprintId): Future[Seq[User]] =
+    db.run(sprintStorage.getUsersWithNoDeclaration(sprintId))
 }

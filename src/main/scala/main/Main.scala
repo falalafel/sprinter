@@ -33,9 +33,11 @@ import week.routes.WeekRoute
 import week.services.WeekService
 import week.storages.WeekStorage
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
+
 import scala.concurrent.ExecutionContext
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
+import notification.NotificationThread
 
 trait MainContext {
 
@@ -107,4 +109,7 @@ object Main extends App with MainContext {
     case None => config.getInt("http.port")
   }
   Http().bindAndHandle(routes, interface, port)
+
+  val notificationThread = new Thread(new NotificationThread)
+  notificationThread.start()
 }
