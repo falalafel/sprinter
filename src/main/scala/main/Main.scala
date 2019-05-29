@@ -110,6 +110,6 @@ object Main extends App with MainContext {
   }
   Http().bindAndHandle(routes, interface, port)
 
-  val notificationThread = new Thread(new NotificationThread)
+  val notificationThread = new Thread(new NotificationThread(userService, sprintService))
   notificationThread.start()
 }
