@@ -21,6 +21,7 @@ libraryDependencies ++= {
   val catsSlickVersion = "0.9.1"
   val courierVersion   = "1.0.0"
 
+  
   Seq(
     "com.typesafe.slick"       %% "slick"                % slickVersion,
     "com.typesafe.slick"       %% "slick-hikaricp"       % slickVersion,
