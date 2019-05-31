@@ -92,18 +92,4 @@ class SprintService(db: Database, sprintStorage: SprintStorage,
 
     db.run(query.value)
   }
-
-  def getUsersWithNoDeclaration(sprintId: SprintId): Future[Seq[User]] = {
-
-    implicit val getUserResult = GetResult(r => User(UserId(r.<<), FullName(r.<<), Mail(r.<<), Password(r.<<), Role(r.<<)))
-    val id = sprintId.id
-    val query = sql"""
-          select u.userid, u.fullname, u.mail, u.password, u.role from declaration as d
-          right outer join "user" as u on d.userid = u.userid
-	        join projectmembership as pm on pm.userid = u.userid
-	        join sprint as s on s.projectid = pm.projectid
-		      where d.userid is null and s.sprintid = $id""".as[User]
-
-    db.run(query)
-  }
 }
