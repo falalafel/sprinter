@@ -36,6 +36,7 @@ import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import scala.concurrent.ExecutionContext
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
+import notification.NotificationService
 
 trait MainContext {
 
@@ -70,6 +71,8 @@ trait MainContext {
   lazy val projectMembershipStorage: ProjectMembershipStorage = wire[ProjectMembershipStorage]
   lazy val projectMembershipService: ProjectMembershipService = wire[ProjectMembershipService]
   lazy val projectMembershipRoutes: ProjectMembershipRoutes = wire[ProjectMembershipRoutes]
+
+  lazy val notificationService: NotificationService = wire[NotificationService]
 
   lazy val settings = CorsSettings.defaultSettings.withAllowedMethods(List(OPTIONS, GET, POST, PUT, PATCH, DELETE))
 
@@ -107,4 +110,7 @@ object Main extends App with MainContext {
     case None => config.getInt("http.port")
   }
   Http().bindAndHandle(routes, interface, port)
+
+  notificationService.run
+
 }

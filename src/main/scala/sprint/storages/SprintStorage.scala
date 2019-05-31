@@ -4,7 +4,7 @@ import project.domain.ProjectId
 import project.storages.Projects
 import slick.dbio.DBIO
 import slick.jdbc.PostgresProfile.api._
-import sprint.domain.{Sprint, SprintId}
+import sprint.domain.{Sprint, SprintClosingStatus, SprintId}
 
 class SprintStorage {
   import Sprints._
@@ -12,6 +12,9 @@ class SprintStorage {
 
   def getSprintsByProjectId(projectId: ProjectId): DBIO[Seq[Sprint]] =
     sprints.filter(_.projectId === projectId).result
+
+  def getOpenSprints: DBIO[Seq[Sprint]] =
+    sprints.filter(_.closingStatus === SprintClosingStatus.apply(false)).result
 
   def getSprint(projectId: ProjectId, sprintId: SprintId): DBIO[Option[Sprint]] =
     sprints.filter(record => record.projectId === projectId && record.sprintId === sprintId).result.headOption
