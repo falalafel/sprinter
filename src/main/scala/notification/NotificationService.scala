@@ -26,7 +26,7 @@ class NotificationService(userService: UserService,
     .as(senderName, senderPass)
     .startTls(true)()
 
-  def run: Cancellable = system.scheduler.schedule(1 minutes, 1 days) {
+  def run: Cancellable = system.scheduler.schedule(3 hours, 1 days) {
     sprintService.getOpenSprints.map {
       _.map { sprint =>
         for {
