@@ -25,6 +25,12 @@ case class SprintEffectiveFactor(value: Double) extends AnyVal
 
 case class SprintEffectiveFactorWithHistory(value: Double) extends AnyVal
 
+case class SprintEffectiveHoursNeeded(value: Double) extends AnyVal
+
+case class SprintAllHours(value: Double) extends AnyVal
+
+case class SprintEstimatedEffectiveHours(value: Double) extends AnyVal
+
 case class Sprint(
                    projectId: ProjectId,
                    sprintId: SprintId,
@@ -36,14 +42,21 @@ case class Sprint(
                    endPlannedHours: Option[SprintEndPlannedHours] = None,
                    burnedHours: Option[SprintBurnedHours] = None,
                    effectiveFactor: Option[SprintEffectiveFactor] = None,
-                   effectiveFactorWithHistory: Option[SprintEffectiveFactorWithHistory] = None
+                   effectiveFactorWithHistory: Option[SprintEffectiveFactorWithHistory] = None,
+                   effectiveHoursNeeded: Option[SprintEffectiveHoursNeeded] = None,
+                   allHours : Option[SprintAllHours] = None,
+                   estimatedEffectiveHours: Option[SprintEstimatedEffectiveHours] = None
                  )
 
 case class SprintUpdate(closingStatus: SprintClosingStatus,
                         endPlannedHours: SprintEndPlannedHours,
                         burnedHours: SprintBurnedHours) {
-  def toSprint(sprint: Sprint, effectiveFactor: SprintEffectiveFactor,
-               effectiveFactorWithHistory: SprintEffectiveFactorWithHistory): Option[Sprint] =
+  def toSprint(sprint: Sprint,
+               effectiveFactor: SprintEffectiveFactor,
+               effectiveFactorWithHistory: SprintEffectiveFactorWithHistory,
+               effectiveHoursNeeded: SprintEffectiveHoursNeeded,
+               allHours: SprintAllHours,
+               estimatedEffectiveHours: SprintEstimatedEffectiveHours): Option[Sprint] =
     sprint.closingStatus match {
       case SprintClosingStatus(true) =>
         None

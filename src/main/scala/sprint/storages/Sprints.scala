@@ -3,7 +3,7 @@ package sprint.storages
 import project.domain.ProjectId
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.ProvenShape
-import sprint.domain.{Sprint, SprintBurnedHours, SprintClosingStatus, SprintEffectiveFactor, SprintEffectiveFactorWithHistory, SprintEndDate, SprintEndPlannedHours, SprintFactor, SprintId, SprintOriginalEstimatedHours, SprintStartDate}
+import sprint.domain.{Sprint, SprintAllHours, SprintBurnedHours, SprintClosingStatus, SprintEffectiveFactor, SprintEffectiveFactorWithHistory, SprintEffectiveHoursNeeded, SprintEndDate, SprintEndPlannedHours, SprintEstimatedEffectiveHours, SprintFactor, SprintId, SprintOriginalEstimatedHours, SprintStartDate}
 import project.storages.Projects
 
 object Sprints {
@@ -17,6 +17,10 @@ object Sprints {
   implicit val sprintBurnedHoursImpl: BaseColumnType[SprintBurnedHours] = MappedColumnType.base(_.value, SprintBurnedHours)
   implicit val sprintEffectiveFactorImpl: BaseColumnType[SprintEffectiveFactor] = MappedColumnType.base(_.value, SprintEffectiveFactor.apply)
   implicit val sprintEffectiveFactorHistImpl: BaseColumnType[SprintEffectiveFactorWithHistory] = MappedColumnType.base(_.value, SprintEffectiveFactorWithHistory.apply)
+  implicit val sprintHoursNeededImpl: BaseColumnType[SprintEffectiveHoursNeeded] = MappedColumnType.base(_.value, SprintEffectiveHoursNeeded)
+  implicit val sprintAllHoursImpl: BaseColumnType[SprintAllHours] = MappedColumnType.base(_.value, SprintAllHours)
+  implicit val sprintEstimatedEffHoursImpl: BaseColumnType[SprintEstimatedEffectiveHours] = MappedColumnType.base(_.value, SprintEstimatedEffectiveHours)
+
 }
 
 class Sprints(tag: Tag) extends Table[Sprint](tag, "sprint") {
@@ -46,6 +50,12 @@ class Sprints(tag: Tag) extends Table[Sprint](tag, "sprint") {
 
   def effectiveFactorWithHistory: Rep[Option[SprintEffectiveFactorWithHistory]] = column[Option[SprintEffectiveFactorWithHistory]]("effective_factor_hist")
 
+  def hoursNeeded: Rep[Option[SprintEffectiveHoursNeeded]] = column[Option[SprintEffectiveHoursNeeded]]("hours_needed")
+
+  def allHours: Rep[Option[SprintAllHours]] = column[Option[SprintAllHours]]("all_hours")
+
+  def estimatedEffectiveHours: Rep[Option[SprintEstimatedEffectiveHours]] = column[Option[SprintEstimatedEffectiveHours]]("estimated_effective_hours")
+
   def * : ProvenShape[Sprint] = (projectId, sprintId, startDate, endDate, closingStatus,
-    factor, originalEstimatedHours, endPlannedHours, burnedHours, effectiveFactor, effectiveFactorWithHistory) <> (Sprint.tupled, Sprint.unapply)
+    factor, originalEstimatedHours, endPlannedHours, burnedHours, effectiveFactor, effectiveFactorWithHistory, hoursNeeded, allHours, estimatedEffectiveHours) <> (Sprint.tupled, Sprint.unapply)
 }
