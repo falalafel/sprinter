@@ -27,6 +27,12 @@ package object sprint {
   implicit val sprintEffectiveFactorDecoder: Decoder[SprintEffectiveFactor] = deriveUnwrappedDecoder
   implicit val sprintEffectiveFactorWithHistoryEncoder: Encoder[SprintEffectiveFactorWithHistory] = deriveUnwrappedEncoder
   implicit val sprintEffectiveFactorWithHistoryDecoder: Decoder[SprintEffectiveFactorWithHistory] = deriveUnwrappedDecoder
+  implicit val sprintEffectiveHoursNeededEncoder: Encoder[SprintEffectiveHoursNeeded] = deriveUnwrappedEncoder
+  implicit val sprintEffectiveHoursNeededDecoder: Decoder[SprintEffectiveHoursNeeded] = deriveUnwrappedDecoder
+  implicit val sprintAllHoursEncoder: Encoder[SprintAllHours] = deriveUnwrappedEncoder
+  implicit val sprintAllHoursDecoder: Decoder[SprintAllHours] = deriveUnwrappedDecoder
+  implicit val sprintEstimatedEffectiveHoursEncoder: Encoder[SprintEstimatedEffectiveHours] = deriveUnwrappedEncoder
+  implicit val sprintEstimatedEffectiveHoursDecoder: Decoder[SprintEstimatedEffectiveHours] = deriveUnwrappedDecoder
 
   implicit val sprintEncoder: Encoder[Sprint] = deriveEncoder
   implicit val sprintDecoder: Decoder[Sprint] = deriveDecoder

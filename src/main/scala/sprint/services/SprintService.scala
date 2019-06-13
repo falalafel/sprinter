@@ -6,10 +6,8 @@ import cats.data.OptionT
 import declaration.storages.DeclarationStorage
 import project.domain.ProjectId
 import project.storages.ProjectStorage
-import slick.jdbc.GetResult
 import sprint.domain._
 import sprint.storages.SprintStorage
-import user.domain._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -51,7 +49,7 @@ class SprintService(db: Database, sprintStorage: SprintStorage,
 
   def updateSprint(projectId: ProjectId, sprintId: SprintId, sprintUpdate: SprintUpdate): Future[Option[Int]] = {
 
-    val factors: DBIO[(SprintEffectiveFactor, SprintEffectiveFactorWithHistory)] = for {
+    val factors: DBIO[(SprintEffectiveFactor, SprintEffectiveFactorWithHistory, SprintAllHours, SprintEffectiveHoursNeeded)] = for {
       declarations <- declarationStorage.getDeclarationsForSprint(projectId, sprintId)
       sprints <- sprintStorage.getSprintsByProjectId(projectId)
     } yield {
@@ -71,13 +69,26 @@ class SprintService(db: Database, sprintStorage: SprintStorage,
       val fullEffectiveFactors = pastEffectiveFactors :+ SprintEffectiveFactor(effectiveFactor)
       val effectiveFactorWithHistory = fullEffectiveFactors.foldLeft(0.0)((acc, factor) => acc + factor.value) / fullEffectiveFactors.length
 
-      (SprintEffectiveFactor(effectiveFactor), SprintEffectiveFactorWithHistory(effectiveFactorWithHistory))
+      (
+        SprintEffectiveFactor(effectiveFactor),
+        SprintEffectiveFactorWithHistory(effectiveFactorWithHistory),
+        SprintAllHours(sumWorked),
+        SprintEffectiveHoursNeeded(effectiveHoursNeeded)
+      )
     }
 
     val query = for {
       sprint <- OptionT(sprintStorage.getSprint(projectId, sprintId))
-      (effective, effectiveWithHistory) <- OptionT.liftF(factors)
-      updatedSprint <- OptionT.fromOption(sprintUpdate.toSprint(sprint, effective, effectiveWithHistory))
+      (effective, effectiveWithHistory, allHours, hoursNeeded) <- OptionT.liftF(factors)
+      updatedSprint <- OptionT.fromOption(sprintUpdate
+        .toSprint(
+          sprint,
+          effective,
+          effectiveWithHistory,
+          hoursNeeded,
+          allHours,
+          SprintEstimatedEffectiveHours(allHours.value)
+        ))
       result <- OptionT.liftF(sprintStorage.updateSprint(updatedSprint))
     } yield result
 

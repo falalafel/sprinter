@@ -6,7 +6,6 @@ import io.circe.syntax._
 import utils.{TemplateSpec, TestHelpers}
 import SprintSpecHelpers._
 import akka.http.scaladsl.model.headers.Cookie
-import sprint.domain.{SprintFactor, SprintId}
 
 class SprintSpec extends TemplateSpec with TestHelpers {
 
@@ -16,7 +15,7 @@ class SprintSpec extends TemplateSpec with TestHelpers {
   val sprintCreateQuery = sprintService.createSprint(sprintCreate, projectId)
   val (_, sprintId) = result(sprintCreateQuery).get
 
-  val sprintCreateMock = sprintCreate.toSprint(projectId, SprintId(sprintId.id + 1), SprintFactor(2.5))
+  val sprintCreateMock = sprintCreate
   val sprintUpdateMock = sprintUpdate
 
   "SprintSpec" should {
