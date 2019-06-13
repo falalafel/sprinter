@@ -15,7 +15,8 @@ object SprintSpecHelpers {
   )
 
   def sprintCreate = SprintCreate(SprintStartDate(LocalDate.now()),
-    SprintEndDate(LocalDate.of(2077, 12, 30)))
+    SprintEndDate(LocalDate.of(2077, 12, 30)),
+    SprintOriginalEstimatedHours(3))
 
   def sprintUpdate = SprintUpdate(
     SprintClosingStatus(true),

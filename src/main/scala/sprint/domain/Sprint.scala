@@ -32,7 +32,7 @@ case class Sprint(
                    endDate: SprintEndDate,
                    closingStatus: SprintClosingStatus,
                    factor: SprintFactor,
-                   originalEstimatedHours: Option[SprintOriginalEstimatedHours] = None,
+                   originalEstimatedHours: SprintOriginalEstimatedHours,
                    endPlannedHours: Option[SprintEndPlannedHours] = None,
                    burnedHours: Option[SprintBurnedHours] = None,
                    effectiveFactor: Option[SprintEffectiveFactor] = None,
@@ -59,7 +59,7 @@ case class SprintUpdate(closingStatus: SprintClosingStatus,
               sprint.endDate,
               closingStatus,
               sprint.factor,
-              Some(originalEstimatedHours),
+              sprint.originalEstimatedHours,
               Some(endPlannedHours),
               Some(burnedHours),
               Some(effectiveFactor),
@@ -73,13 +73,15 @@ case class SprintUpdate(closingStatus: SprintClosingStatus,
 }
 
 case class SprintCreate(startDate: SprintStartDate,
-                        endDate: SprintEndDate) {
+                        endDate: SprintEndDate,
+                        estimatedHours: SprintOriginalEstimatedHours) {
   def toSprint(projectId: ProjectId, sprintId: SprintId, factor: SprintFactor) = Sprint(
     projectId,
     sprintId,
     startDate,
     endDate,
     SprintClosingStatus(false),
-    factor
+    factor,
+    estimatedHours
   )
 }

@@ -36,7 +36,7 @@ class Sprints(tag: Tag) extends Table[Sprint](tag, "sprint") {
 
   def factor: Rep[SprintFactor] = column[SprintFactor]("factor")
 
-  def originalEstimatedHours: Rep[Option[SprintOriginalEstimatedHours]] = column[Option[SprintOriginalEstimatedHours]]("original_estimated_hours")
+  def originalEstimatedHours: Rep[SprintOriginalEstimatedHours] = column[SprintOriginalEstimatedHours]("original_estimated_hours")
 
   def endPlannedHours: Rep[Option[SprintEndPlannedHours]] = column[Option[SprintEndPlannedHours]]("end_planned_hours")
 
