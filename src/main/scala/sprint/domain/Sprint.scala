@@ -40,7 +40,6 @@ case class Sprint(
                  )
 
 case class SprintUpdate(closingStatus: SprintClosingStatus,
-                        originalEstimatedHours: SprintOriginalEstimatedHours,
                         endPlannedHours: SprintEndPlannedHours,
                         burnedHours: SprintBurnedHours) {
   def toSprint(sprint: Sprint, effectiveFactor: SprintEffectiveFactor,

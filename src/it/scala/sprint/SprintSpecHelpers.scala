@@ -20,7 +20,6 @@ object SprintSpecHelpers {
 
   def sprintUpdate = SprintUpdate(
     SprintClosingStatus(true),
-    SprintOriginalEstimatedHours(52),
     SprintEndPlannedHours(64),
     SprintBurnedHours(57)
   )
