@@ -18,7 +18,6 @@ object ProjectMembershipHelpers {
   def userCreate = UserCreate(
     FullName("[projectmembership test] user"),
     Mail("user@mail.com"),
-    Password("DSdt4F463d"),
     Role(0)
   )
 

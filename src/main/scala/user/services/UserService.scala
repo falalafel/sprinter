@@ -5,9 +5,11 @@ import user.storages.UserStorage
 import slick.jdbc.PostgresProfile.api._
 import com.rms.miu.slickcats.DBIOInstances._
 import cats.data.OptionT
+import notification.{NotificationService, UserCreationService}
+
 import scala.concurrent.{ExecutionContext, Future}
 
-class UserService(db: Database, userStorage: UserStorage)
+class UserService(db: Database, userStorage: UserStorage, notificationService: UserCreationService)
                     (implicit ec: ExecutionContext){
 
   def getUsers: Future[Seq[User]] =
@@ -16,8 +18,13 @@ class UserService(db: Database, userStorage: UserStorage)
   def getUser(userId: UserId): Future[Option[User]] =
     db.run(userStorage.getUserById(userId))
 
-  def createUser(user: User): Future[UserId] =
-    db.run(userStorage.insertUser(user).map(_ => user.userId))
+  def createUser(user: User): Future[UserId] = {
+    val result = db.run(userStorage.insertUser(user).map(_ => user.userId))
+
+    notificationService.sendMail(user.mail.mail, user.password)
+
+    result
+  }
 
   def updateUser(userId: UserId, userUpdate: UserUpdate): Future[Option[Int]] = {
     val query = for {

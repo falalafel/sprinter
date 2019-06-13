@@ -10,6 +10,11 @@ case class UserId(id: Int) extends AnyVal
 case class FullName(name: String) extends AnyVal
 case class Mail(mail: String) extends AnyVal
 case class Password(password: String) extends AnyVal
+
+object Password {
+  def generate: Password = Password(Random.alphanumeric.take(8).toString())
+}
+
 case class Role(role: Int) extends AnyVal
 
 case class User(userId: UserId,
@@ -32,12 +37,11 @@ case class UserUpdate(name: Option[FullName],
 
 case class UserCreate(name: FullName,
                       mail: Mail,
-                      password: Password,
                       role: Role) {
   def toUser =
     User(UserId.generate,
          name,
          mail,
-         password,
+         Password.generate,
          role)
 }
