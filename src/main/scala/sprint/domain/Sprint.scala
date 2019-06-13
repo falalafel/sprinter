@@ -75,7 +75,10 @@ case class SprintUpdate(closingStatus: SprintClosingStatus,
               Some(endPlannedHours),
               Some(burnedHours),
               Some(effectiveFactor),
-              Some(effectiveFactorWithHistory)
+              Some(effectiveFactorWithHistory),
+              Some(effectiveHoursNeeded),
+              Some(allHours),
+              Some(estimatedEffectiveHours)
             ))
 
           case SprintClosingStatus(false) =>
