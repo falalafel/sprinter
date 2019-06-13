@@ -35,8 +35,8 @@ class UserRoutes(userService: UserService, sessionRoutes: SessionRoutes, weekRou
             })
           } ~
             patch {
-              entity(as[UserUpdate]) { projectUpdate =>
-                complete(userService.updateUser(id, projectUpdate).map {
+              entity(as[UserUpdate]) { userUpdate =>
+                complete(userService.updateUser(id, userUpdate).map {
                   case Some(i) => StatusCodes.NoContent -> i.asJson
                   case None => StatusCodes.NotFound -> id.asJson
                 })
