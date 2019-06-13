@@ -12,7 +12,7 @@ case class Mail(mail: String) extends AnyVal
 case class Password(password: String) extends AnyVal
 
 object Password {
-  def generate: Password = Password(Random.alphanumeric.take(8).toString())
+  def generate: Password = Password(Random.alphanumeric.take(8).mkString)
 }
 
 case class Role(role: Int) extends AnyVal

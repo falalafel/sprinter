@@ -18,6 +18,7 @@ class UserCreationService(system: ActorSystem,
   val senderName = config.getString("mailer.name")
   val senderPass = config.getString("mailer.password")
   val subject = "SPRINTER: declaration reminder"
+
   val content = Text("Did you forgot to declare your availability for next sprint? Sprinter is waiting for your declaration.")
   def content2(pass: String) = Text(s"Hello form Sprinter! Your password is: $pass")
   val mailer = Mailer("smtp.gmail.com", 587)
