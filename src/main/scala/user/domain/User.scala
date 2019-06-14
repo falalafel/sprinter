@@ -12,6 +12,10 @@ case class FullName(name: String) extends AnyVal
 
 case class Mail(mail: String) extends AnyVal
 
+object Mail {
+  def generate: Mail = Mail(s"${Random.alphanumeric.take(6).mkString}@company.com")
+}
+
 case class Password(password: String) extends AnyVal
 
 object Password {

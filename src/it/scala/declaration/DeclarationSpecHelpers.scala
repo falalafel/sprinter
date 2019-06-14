@@ -21,7 +21,7 @@ object DeclarationSpecHelpers {
 
   def userCreate = UserCreate(
     FullName("[declaration test] John Snow"),
-    Mail("user@company.com"),
+    Mail.generate,
     Role(0)
   )
 

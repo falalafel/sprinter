@@ -17,7 +17,7 @@ object ProjectMembershipHelpers {
 
   def userCreate = UserCreate(
     FullName("[projectmembership test] user"),
-    Mail("user@mail.com"),
+    Mail.generate,
     Role(0)
   )
 

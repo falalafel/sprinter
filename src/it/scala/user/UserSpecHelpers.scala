@@ -4,10 +4,10 @@ import user.domain.{FullName, Mail, Password, Role, UserCreate, UserUpdate}
 
 object UserSpecHelpers {
 
-  def testUserCreate = UserCreate(FullName("John Snow"), Mail("user@company.com"), Role(0))
+  def testUserCreate = UserCreate(FullName("John Snow"), Mail.generate, Role(0))
 
   def testUserUpdate(name: FullName = FullName("xd"),
-                     mail: Mail = Mail("xd"),
+                     mail: Mail = Mail.generate,
                      oldPassword: Password = Password("Dr5Uv234Qw"),
                      password: Password = Password("xd"),
                      role: Role = Role(0)) =

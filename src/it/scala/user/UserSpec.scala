@@ -10,12 +10,14 @@ import akka.http.scaladsl.model.headers.Cookie
 class UserSpec extends TemplateSpec with TestHelpers {
 
   val userMock = testUserCreate
+  val userMock2 = testUserCreate
+  val userMock3 = testUserCreate
 
   val userUpdateMock = userService.createUser(userMock.toUser)
   val idUpdate = result(userUpdateMock)
   val userUpdate = testUserUpdate()
 
-  val userDeleteMock = userService.createUser(userMock.toUser)
+  val userDeleteMock = userService.createUser(userMock3.toUser)
   val idDelete = result(userDeleteMock)
 
   "UserSpec" should {
@@ -26,7 +28,7 @@ class UserSpec extends TemplateSpec with TestHelpers {
     }
 
     "post user" in {
-      Post("/user").withEntity(ContentTypes.`application/json`, userMock.asJson.toString) ~>
+      Post("/user").withEntity(ContentTypes.`application/json`, userMock2.asJson.toString) ~>
         Cookie("sprinter-client" -> sessionId) ~>
         Route.seal(routes) ~> check {
         status shouldBe StatusCodes.Created

@@ -20,7 +20,7 @@ trait TemplateSpec extends WordSpec with Matchers with ScalatestRouteTest with M
 
   //TODO move to separate stage to be executed once
   //TODO wrap all paths in Cookie with sessionId
-  private def testUserCreate = UserCreate(FullName("Stub"), Mail("user@company.com"), Role(0))
+  private def testUserCreate = UserCreate(FullName("Stub"), Mail.generate, Role(0))
   private val userCreateQuery = userService.createUser(userCreate.toUser)
   private val userId = result(userCreateQuery)
   private val sess = Session(userId = userId)
