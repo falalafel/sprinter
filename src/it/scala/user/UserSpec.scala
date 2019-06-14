@@ -33,14 +33,6 @@ class UserSpec extends TemplateSpec with TestHelpers {
       }
     }
 
-    "update user" in {
-      Patch(s"/user/${idUpdate.id}").withEntity(ContentTypes.`application/json`, userUpdate.asJson.toString()) ~>
-        Cookie("sprinter-client" -> sessionId) ~>
-        Route.seal(routes) ~> check {
-        status shouldBe StatusCodes.NoContent
-      }
-    }
-
     "delete user" in {
       Delete(s"/user/${idDelete.id}") ~>
         Cookie("sprinter-client" -> sessionId) ~>
