@@ -8,12 +8,16 @@ import user.services.UserService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import user.domain.{UserCreate, UserId, UserUpdate}
 import io.circe.syntax._
+import projectmembership.services.ProjectMembershipService
 import session.routes.SessionRoutes
 import week.routes.WeekRoute
 
 import scala.concurrent.ExecutionContext
 
-class UserRoutes(userService: UserService, sessionRoutes: SessionRoutes, weekRoute: WeekRoute)
+class UserRoutes(userService: UserService,
+                 sessionRoutes: SessionRoutes,
+                 weekRoute: WeekRoute,
+                 projectMembershipService: ProjectMembershipService)
                 (implicit mat: Materializer, ec: ExecutionContext) {
 
   def userRoutes: Route = pathPrefix("user") {
@@ -27,7 +31,9 @@ class UserRoutes(userService: UserService, sessionRoutes: SessionRoutes, weekRou
         }
       } ~
       pathPrefix(IntNumber.map(UserId.apply)) { id =>
-        pathEndOrSingleSlash {
+        pathPrefix("memberships") {
+          complete(projectMembershipService.getUsersMemberships(id))
+        } ~ pathEndOrSingleSlash {
           get {
             complete(userService.getUser(id).map {
               case Some(user) => StatusCodes.OK -> user.asJson

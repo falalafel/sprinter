@@ -19,6 +19,9 @@ class ProjectMembershipService(db: Database, projectMembershipStorage: ProjectMe
   def getProjectMembership(projectId: ProjectId, userId: UserId): Future[Option[ProjectMembership]] =
     db.run(projectMembershipStorage.getProjectMembership(projectId, userId))
 
+  def getUsersMemberships(userId: UserId): Future[Seq[ProjectMembership]] =
+    db.run(projectMembershipStorage.getProjectMembershipsForUser(userId))
+
   def insertOrUpdateProjectMembership(projectMembership: ProjectMembership): Future[(ProjectId, UserId)] =
     db.run(projectMembershipStorage.insertOrUpdateProjectMembership(projectMembership)
       .map(_ => (projectMembership.projectId, projectMembership.userId)))

@@ -22,4 +22,7 @@ package object user {
   implicit val userFullNameEncoder: Encoder[FullName] = deriveUnwrappedEncoder
   implicit val userMailDecoder: Decoder[Mail] = deriveUnwrappedDecoder
   implicit val userMailEncoder: Encoder[Mail] = deriveUnwrappedEncoder
+
+  implicit val userNoPassDecoder: Decoder[UserNoPassword] = deriveDecoder
+  implicit val userNoPassEncoder: Encoder[UserNoPassword] = deriveEncoder
 }

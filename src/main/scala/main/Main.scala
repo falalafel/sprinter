@@ -33,10 +33,11 @@ import week.routes.WeekRoute
 import week.services.WeekService
 import week.storages.WeekStorage
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
+
 import scala.concurrent.ExecutionContext
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
-import notification.NotificationService
+import notification.{NotificationService, UserCreationService}
 
 trait MainContext {
 
@@ -73,6 +74,7 @@ trait MainContext {
   lazy val projectMembershipRoutes: ProjectMembershipRoutes = wire[ProjectMembershipRoutes]
 
   lazy val notificationService: NotificationService = wire[NotificationService]
+  lazy val userCreationService: UserCreationService = wire[UserCreationService]
 
   lazy val settings = CorsSettings.defaultSettings.withAllowedMethods(List(OPTIONS, GET, POST, PUT, PATCH, DELETE))
 

@@ -13,6 +13,9 @@ class ProjectMembershipStorage {
   def getProjectMembershipsForProject(projectId: ProjectId): DBIO[Seq[ProjectMembership]] =
     projectMemberships.filter(_.projectId === projectId).result
 
+  def getProjectMembershipsForUser(userId: UserId): DBIO[Seq[ProjectMembership]] =
+    projectMemberships.filter(_.userId === userId).result
+
   def getProjectMembership(projectId: ProjectId, userId: UserId): DBIO[Option[ProjectMembership]] =
     projectMemberships.filter(record => record.projectId === projectId && record.userId === userId).result.headOption
 
