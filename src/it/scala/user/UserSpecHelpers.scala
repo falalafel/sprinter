@@ -8,8 +8,9 @@ object UserSpecHelpers {
 
   def testUserUpdate(name: FullName = FullName("xd"),
                      mail: Mail = Mail("xd"),
+                     oldPassword: Password = Password("Dr5Uv234Qw"),
                      password: Password = Password("xd"),
                      role: Role = Role(0)) =
-    UserUpdate(Some(name), Some(mail), Some(password), Some(role))
+    UserUpdate(Some(name), Some(mail), Some(oldPassword), Some(password), Some(role))
 
 }

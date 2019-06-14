@@ -25,6 +25,7 @@ case class User(userId: UserId,
 
 case class UserUpdate(name: Option[FullName],
                       mail: Option[Mail],
+                      oldPassword: Option[Password],
                       password: Option[Password],
                       role: Option[Role]) {
   def update(user: User) : User =

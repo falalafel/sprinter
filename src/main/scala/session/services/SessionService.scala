@@ -4,7 +4,7 @@ import akka.http.scaladsl.server.directives.Credentials
 import cats.data.OptionT
 import session.domain.{Session, SessionId}
 import session.storages.SessionStorage
-import user.domain.UserId
+import user.domain.{UserId, Mail}
 import slick.jdbc.PostgresProfile.api._
 import user.storages.UserStorage
 import com.rms.miu.slickcats.DBIOInstances._
@@ -26,7 +26,7 @@ class SessionService(db: Database, sessionStorage: SessionStorage, userStorage: 
     val query = cred match {
       case provided @ Credentials.Provided(userId) =>
         val query = for {
-          user <- OptionT(userStorage.getUserById(UserId(userId.toInt))) if provided.verify(user.password.password)
+          user <- OptionT(userStorage.getUserByMail(Mail(userId))) if provided.verify(user.password.password)   // User found by mail 
           cookieHash <- OptionT.liftF(sessionStorage.insertSession(Session(userId = user.userId)))
         } yield cookieHash
         query.value

@@ -29,6 +29,7 @@ class UserService(db: Database, userStorage: UserStorage, notificationService: U
   def updateUser(userId: UserId, userUpdate: UserUpdate): Future[Option[Int]] = {
     val query = for {
       user <- OptionT(userStorage.getUserById(userId))
+      oldPassword <- OptionT.fromOption(userUpdate.oldPassword) if user.password == oldPassword 
       updatedUser = userUpdate.update(user)
       result <- OptionT.liftF(userStorage.updateUser(updatedUser))
     } yield result
